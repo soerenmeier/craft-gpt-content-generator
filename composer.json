@@ -1,0 +1,43 @@
+{
+	"name": "soerenmeier/gpt-content-generator",
+	"description": "Enhance your craft cms experience with GPT.",
+	"type": "craft-plugin",
+	"license": "proprietary",
+	"support": {
+		"source": "https://github.com/soerenmeier/craft-gpt-content-generator"
+	},
+	"authors": [
+		{
+			"name": "Sören Meier",
+			"homepage": "https://github.com/soerenmeier"
+		}
+	],
+	"require": {
+		"php": ">=8.0.2",
+		"craftcms/cms": "^4.4.8",
+		"guzzlehttp/guzzle": "^7.8",
+		"nystudio107/craft-plugin-vite": "^4.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"soerenmeier\\gptcontentgenerator\\": "src/"
+		}
+	},
+	"extra": {
+		"handle": "gpt-content-generator",
+		"name": "GPT Content Generator",
+		"developer": "Sören Meier",
+		"documentationUrl": "",
+		"class": "soerenmeier\\gptcontentgenerator\\GptContentGenerator"
+	},
+	"config": {
+		"sort-packages": true,
+		"platform": {
+			"php": "8.0.2"
+		},
+		"allow-plugins": {
+			"yiisoft/yii2-composer": true,
+			"craftcms/plugin-installer": true
+		}
+	}
+}

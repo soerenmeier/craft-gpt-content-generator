@@ -1,0 +1,10 @@
+{% import '_includes/forms.twig' as forms %}
+
+{# {{ craft.viteAssets.register('src/main.js', false) }} #}
+
+{{ forms.lightswitchField({
+	first: true,
+	label: 'fieldsEnabled',
+	name: 'fieldsEnabled',
+	on: settings.fieldsEnabled
+}) }}
