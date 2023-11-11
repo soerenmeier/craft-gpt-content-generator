@@ -8,6 +8,9 @@ class Prompts extends ActiveRecord {
 	// public string $name;
 	// public string $prompt;
 
+	// prompt groups
+	// maybe defined in a config.php
+
 	public static function tableName() {
 		return '{{%gpt_content_prompts}}';
 	}

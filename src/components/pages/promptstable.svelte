@@ -1,0 +1,51 @@
+<script>
+	export let prompts;
+	export let url;
+
+	async function onDelete(e, prompt) {
+		if (!confirm('Delete the Prompt?'))
+			return;
+
+		try {
+			await prompts.del(prompt);
+			prompts = prompts;
+		} catch (e) {
+			console.log('could not delete prompt');
+			alert('Failed to delete the prompt');
+		}
+	}
+</script>
+
+{#if !prompts.list.length}
+	<div class="zilch"><p>No GraphQL tokens exist yet.</p></div>
+{:else}
+	<div class="tableview">
+		<div class="vue-admin-tablepane tablepane">
+			<table class="vuetable data fullwidth">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Prompt</th>
+						<th class="thin"></th>
+					</tr>
+				</thead>
+				<tbody class="vuetable-body">
+					{#each prompts.list as prompt}
+						<tr>
+							<td>
+								<a href={url + '/prompts/' + prompt.id}>{prompt.name}</a>
+							</td>
+							<td>
+								<span class="light">{prompt.prompt}</span>
+							</td>
+							<td>
+								<a title="Delete" role="button" href="#" class="delete icon" on:click|preventDefault={e => onDelete(e, prompt)}></a>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+		<!---->
+	</div>
+{/if}

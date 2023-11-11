@@ -18,6 +18,13 @@ class PromptsController extends Controller {
 		return $this->asJson(Prompts::find()->all());
 	}
 
+	public function actionEdit(?int $promptId = null): Response {
+		return $this->renderTemplate('gpt-content-generator/prompts/edit', [
+			'promptId' => $promptId
+		]);
+	}
+	
+
 	// actions/gpt-content-generator/prompts/save
 	public function actionSave() {
 		$this->requirePostRequest();

@@ -10,7 +10,29 @@ export default class Prompts {
 		return new Prompts(await resp.json());
 	}
 
-	save(prompt) {
+	async save(prompt) {
+		const data = new FormData;
+		if (prompt.id)
+			data.set('id', prompt.id);
+		data.set('name', prompt.name);
+		data.set('prompt', prompt.prompt);
+
+		const resp = await fetch(
+			'/actions/gpt-content-generator/prompts/save',
+			{
+				method: 'POST',
+				body: data,
+				headers: {
+					Accept: 'application/json'
+				}
+			}
+		);
+		if (!resp.ok)
+			throw new Error('not ok');
+		prompt = await resp.json();
+
+		// update data
+
 		const updated = this.list.find(p => {
 			if (p.id != prompt.id)
 				return false;
@@ -22,12 +44,49 @@ export default class Prompts {
 		if (!updated)
 			this.list.push(prompt);
 
-		return this;
+		return prompt;
 	}
 
-	del(prompt) {
-		this.list = this.list.filter(p => p.id !== prompt.id);
+	async del(prompt) {
+		const data = new FormData;
+		data.set('id', prompt.id);
 
-		return this;
+		const resp = await fetch(
+			'/actions/gpt-content-generator/prompts/delete',
+			{
+				method: 'POST',
+				body: data,
+				headers: {
+					Accept: 'application/json'
+				}
+			}
+		);
+		if (!resp.ok)
+			throw new Error('not ok');
+
+		// update data
+
+		this.list = this.list.filter(p => p.id !== prompt.id);
+	}
+
+	// finalPrompt: str
+	async execute(finalPrompt) {
+		const data = new FormData;
+		data.set('prompt', finalPrompt);
+		
+		const resp = await fetch(
+			'/actions/gpt-content-generator/prompts/execute',
+			{
+				method: 'POST',
+				body: data,
+				headers: {
+					Accept: 'application/json'
+				}
+			}
+		);
+		if (!resp.ok)
+			throw new Error('not ok');
+
+		return await resp.json();
 	}
 }

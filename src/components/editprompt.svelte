@@ -2,35 +2,26 @@
 	import { createEventDispatcher } from 'svelte';
 	import LightSwitch from './lightswitch.svelte';
 
+	export let prompts;
 	export let prompt;
 
 	const dispatch = createEventDispatcher();
 
-	let shouldSave = true;
+	// let shouldSave = true;
 
 	async function onSubmit(e) {
-		if (!shouldSave) {
-			dispatch('save', { prompt });
-			return;
+		// if (!shouldSave) {
+		// 	dispatch('save', { prompt });
+		// 	return;
+		// }
+
+		try {
+			const nPrompt = await prompts.save(prompt);
+
+			dispatch('save', { prompt: nPrompt });
+		} catch (e) {
+			alert('Could not save prompt');
 		}
-
-		const data = new FormData(e.target);
-		if ((prompt?.id ?? null) !== null)
-			data.set('id', prompt.id);
-
-		const resp = await fetch(
-			'/actions/gpt-content-generator/prompts/save',
-			{
-				method: 'POST',
-				body: data,
-				headers: {
-					Accept: 'application/json'
-				}
-			}
-		);
-		prompt = await resp.json();
-
-		dispatch('save', { prompt });
 	}
 </script>
 
@@ -73,7 +64,7 @@
 			</div>
 		</div>
 
-		{#if (prompt?.id ?? null) === null}
+		<!-- {#if (prompt?.id ?? null) === null}
 			<div class="field width-100">
 				<div class="heading">
 					<label for="gpt-prompt-save">Save Prompt</label>
@@ -83,7 +74,7 @@
 					<LightSwitch id="gpt-prompt-save" bind:on={shouldSave} name="should-save" />
 				</div>
 			</div>
-		{/if}
+		{/if} -->
 		
 		<button class="btn submit">Save</button>
 		<button type="button" class="btn" on:click={e => dispatch('cancel')}>Cancel</button>

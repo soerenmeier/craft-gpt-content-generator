@@ -1,0 +1,11 @@
+{% extends '_layouts/cp.twig' %}
+{% set plHandle = 'gpt-content-generator' %}
+{% set title = 'Prompts'|t(plHandle) %}
+
+{% block actionButton %}
+	<a class="btn submit add icon" href="{{url('gpt-content-generator/prompts/new')}}">{{ "New prompt"|t('app') }}</a>
+{% endblock %}
+
+{% block content %}
+	<div id="prompts-list-table" data-url="{{url('gpt-content-generator')}}"></div>
+{% endblock %}

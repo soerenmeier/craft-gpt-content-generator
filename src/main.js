@@ -2,6 +2,7 @@ import './style.scss';
 import PopOverMan from './lib/popoverman.js';
 import Prompts from './lib/prompts.js';
 import { Input, Textarea } from './lib/field.js';
+import PromptsTable from './components/pages/promptstable.svelte';
 
 const KEY = 'gptvis';
 const popOverMan = new PopOverMan;
@@ -55,15 +56,33 @@ function scanInputs() {
 	}
 }
 
+function initPromptsList(prompts) {
+	const promptsList = document.getElementById('prompts-list-table');
+	if (!promptsList)
+		return;
+
+	const url = new URL(promptsList.dataset.url);
+
+	new PromptsTable({
+		target: promptsList,
+		props: {
+			prompts,
+			url: url.origin + url.pathname
+		}
+	});
+}
+
 async function main() {
 	const prompts = await Prompts.load();
-	popOverMan.setPrompts(prompts);
+	// popOverMan.setPrompts(prompts);
 
-	scanInputs();
+	// scanInputs();
 
-	document.addEventListener('click', e => {
-		// rescan inputs for example if i click to add a matrix field
-		scanInputs();
-	});
+	// document.addEventListener('click', e => {
+	// 	// rescan inputs for example if i click to add a matrix field
+	// 	scanInputs();
+	// });
+
+	initPromptsList(prompts);
 }
 main();

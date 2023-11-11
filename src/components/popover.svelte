@@ -64,8 +64,9 @@
 
 	function onPromptSave(e) {
 		const prompt = e.detail.prompt;
-		if ('id' in prompt)
-			prompts = prompts.save(prompt);
+		prompts = prompts;
+		// if ('id' in prompt)
+		// 	prompts = prompts.save(prompt);
 
 		editPrompt = null;
 	}
@@ -78,24 +79,10 @@
 
 	async function onPromptDelete(e) {
 		const prompt = e.detail.prompt;
-		const data = new FormData;
-		data.set('id', prompt.id);
 
 		try {
-			const resp = await fetch(
-				'/actions/gpt-content-generator/prompts/delete',
-				{
-					method: 'POST',
-					body: data,
-					headers: {
-						Accept: 'application/json'
-					}
-				}
-			);
-			if (!resp.ok)
-				throw new Error('error');
-
-			prompts = prompts.del(prompt);
+			await prompts.del(prompt);
+			prompts = prompts;
 		} catch (e) {
 			console.log('failed to generate');
 			alert('could not delete prompt');
@@ -122,22 +109,8 @@
 		generateError = null;
 		generatePrompt = prompt;
 
-		const data = new FormData;
-		data.set('prompt', prompt);
-
 		try {
-			const resp = await fetch(
-				'/actions/gpt-content-generator/prompts/execute',
-				{
-					method: 'POST',
-					body: data,
-					headers: {
-						Accept: 'application/json'
-					}
-				}
-			);
-			const result = await resp.json();
-			generatedText = result;
+			generatedText = await prompts.execute(prompt);
 		} catch (e) {
 			console.log('failed to generate');
 			generateError = 'could not generate';

@@ -6,9 +6,11 @@ use yii\base\Event;
 use craft\base\Model;
 use craft\base\Plugin;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\RegisterCpNavItemsEvent;
 use craft\web\UrlManager;
 use craft\web\View;
 use craft\web\twig\variables\CraftVariable;
+use craft\web\twig\variables\Cp;
 use nystudio107\pluginvite\services\VitePluginService;
 use soerenmeier\gptcontentgenerator\services\GptService;
 use soerenmeier\gptcontentgenerator\models\Settings;
@@ -20,6 +22,7 @@ class GptContentGenerator extends Plugin {
 	public static $plugin;
 
 	public bool $hasCpSettings = true;
+	public bool $hasCpSection = true;
 
 	public function init() {
 		parent::init();
@@ -44,7 +47,6 @@ class GptContentGenerator extends Plugin {
 			}
 		);
 
-
 		// Register our variables
 		Event::on(
 			CraftVariable::class,
@@ -56,6 +58,15 @@ class GptContentGenerator extends Plugin {
 					'class' => ViteAssets::class,
 					'viteService' => $this->vite,
 				]);
+			}
+		);
+
+		Event::on(
+			UrlManager::class,
+			UrlManager::EVENT_REGISTER_CP_URL_RULES,
+			function(RegisterUrlRulesEvent $event) {
+				$event->rules['gpt-content-generator/prompts/new'] = 'gpt-content-generator/prompts/edit';
+				$event->rules['gpt-content-generator/prompts/<promptId:\d+>'] = 'gpt-content-generator/prompts/edit';
 			}
 		);
 	}
