@@ -1,10 +1,16 @@
 {% import '_includes/forms.twig' as forms %}
 
-{# {{ craft.viteAssets.register('src/main.js', false) }} #}
+{{ forms.autosuggestField({
+	label: 'ApiKey',
+	name: 'apiKey',
+	value: settings.apiKey,
+	suggestEnvVars: true
+}) }}
 
-{{ forms.lightswitchField({
+{# {{ forms.lightswitchField({
 	first: true,
 	label: 'fieldsEnabled',
 	name: 'fieldsEnabled',
 	on: settings.fieldsEnabled
 }) }}
+ #}

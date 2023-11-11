@@ -10,6 +10,8 @@ class SettingsController extends Controller {
 
 	public function actionSaveSettings() {
 		$this->requirePostRequest();
+		$this->requireAdmin();
+
 		$settings = Craft::$app->getRequest()->getBodyParam('settings', []);
 
 		$saveSettings = GptContentGenerator::$plugin->getSettings()

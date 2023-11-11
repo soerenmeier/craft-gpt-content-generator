@@ -3,14 +3,12 @@ namespace soerenmeier\gptcontentgenerator\models;
 
 use craft\base\Model;
 
-class Settings extends Model
-{
-	public $fieldsEnabled = true; // Default value
+class Settings extends Model {
+	public string $apiKey = '';
 
-	public function rules(): array
-	{
+	public function rules(): array {
 		return [
-			[['fieldsEnabled'], 'boolean']
+			[['apiKey'], 'string']
 		];
 	}
 }
