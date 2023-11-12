@@ -3,6 +3,7 @@ export default class Prompts {
 		this.list = resp.prompts;
 		// [{key, name}]
 		this.groups = resp.groups;
+		this.fieldGroups = resp.fieldGroups;
 	}
 
 	static async load() {
@@ -19,6 +20,10 @@ export default class Prompts {
 
 	getGroup(key) {
 		return this.groups.find(g => g.key === key);
+	}
+
+	getFieldGroup(id) {
+		return this.fieldGroups[id] ?? null;
 	}
 
 	async save(prompt) {

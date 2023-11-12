@@ -32,7 +32,14 @@ class SettingsController extends Controller {
 		$settings = GptContentGenerator::$plugin->settings;
 
 		$fields = $craft->fields->getAllFields();
-		$nFields = [];
+		$nFields = [
+			[
+				'id' => (string) 'title',
+				'type' => 'craft\fields\PlainText',
+				'handle' => 'title',
+				'name' => 'Title'
+			]
+		];
 
 		foreach ($fields as $field) {
 			$nField = filterField($field, true);

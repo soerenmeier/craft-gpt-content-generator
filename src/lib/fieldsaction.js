@@ -15,6 +15,26 @@ function renderIcon(field) {
 	});
 }
 
+function newFieldGen(group, type) {
+	const el = document.createElement('div');
+	el.dataset.group = group;
+	el.dataset.type = type;
+
+	return el;
+}
+
+function scanStaticFields(form, prompts) {
+	let title = form.querySelector('input[name=title]');
+	const titleGroup = prompts.getFieldGroup('title');
+	if (title && titleGroup) {
+		const el = newFieldGen(titleGroup, 'craft\\fields\\PlainText');
+		title.parentNode.appendChild(el);
+		title = new Field(el);
+
+		renderIcon(title);
+	}
+}
+
 function scanFields(form) {
 	const fields = form.querySelectorAll(
 		'.gpt-content-generator-field[data-not-scanned]'
@@ -62,7 +82,8 @@ export function init(prompts) {
 
 	// Craft.siteId Craft.sites
 
-	scanFields(form);
+	scanStaticFields(form, prompts);
+	scanFields(form, prompts);
 
 	document.addEventListener('click', e => {
 		// rescan inputs for example if i click to add a matrix field

@@ -37,7 +37,8 @@ class PromptsController extends Controller {
 
 		return $this->asJson([
 			'prompts' => Prompts::find()->all(),
-			'groups' => $groups
+			'groups' => $groups,
+			'fieldGroups' => $plugin->settings->fieldGroups
 		]);
 	}
 
