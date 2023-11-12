@@ -3,6 +3,7 @@ import PopOverMan from './lib/popoverman.js';
 import Prompts from './lib/prompts.js';
 import { Input, Textarea } from './lib/field.js';
 import PromptsTable from './components/pages/promptstable.svelte';
+import PromptsEdit from './components/pages/promptsedit.svelte';
 
 const KEY = 'gptvis';
 const popOverMan = new PopOverMan;
@@ -72,6 +73,26 @@ function initPromptsList(prompts) {
 	});
 }
 
+function initPromptsEdit(prompts) {
+	const promptsEdit = document.getElementById('prompts-edit');
+	if (!promptsEdit)
+		return;
+
+	const form = document.getElementById('main-form');
+	form.removeAttribute('novalidate');
+	const url = new URL(promptsEdit.dataset.url);
+
+	new PromptsEdit({
+		target: promptsEdit,
+		props: {
+			prompts,
+			form,
+			id: promptsEdit.dataset.id,
+			url: url.origin + url.pathname
+		}
+	});
+}
+
 async function main() {
 	const prompts = await Prompts.load();
 	// popOverMan.setPrompts(prompts);
@@ -84,5 +105,6 @@ async function main() {
 	// });
 
 	initPromptsList(prompts);
+	initPromptsEdit(prompts);
 }
 main();

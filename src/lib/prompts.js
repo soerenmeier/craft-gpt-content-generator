@@ -10,6 +10,11 @@ export default class Prompts {
 		return new Prompts(await resp.json());
 	}
 
+	get(id) {
+		id = parseInt(id);
+		return this.list.find(p => p.id === id);
+	}
+
 	async save(prompt) {
 		const data = new FormData;
 		if (prompt.id)
