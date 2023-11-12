@@ -11,8 +11,15 @@ class Install extends Migration {
 		$this->createTable('{{%gpt_content_prompts}}', [
 			'id' => $this->primaryKey(),
 			'name' => $this->string()->notNull(),
-			'prompt' => $this->text()->notNull()
+			'prompt' => $this->text()->notNull(),
+			'group' => $this->string()->notNull()
 		]);
+
+		$this->createIndex(
+			'idx-gpt_content_prompts-group',
+			'{{%gpt_content_prompts}}',
+			'group'
+		);
 
 		return true;
 	}

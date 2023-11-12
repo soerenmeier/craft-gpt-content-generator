@@ -17,7 +17,7 @@
 </script>
 
 {#if !prompts.list.length}
-	<div class="zilch"><p>No GraphQL tokens exist yet.</p></div>
+	<div class="zilch"><p>No Prompts exist yet.</p></div>
 {:else}
 	<div class="tableview">
 		<div class="vue-admin-tablepane tablepane">

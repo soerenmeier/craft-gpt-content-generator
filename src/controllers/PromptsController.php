@@ -16,7 +16,19 @@ class PromptsController extends Controller {
 		// $this->requireGetRequest();
 		$this->requireAdmin();
 
-		return $this->asJson(Prompts::find()->all());
+		$plugin = GptContentGenerator::$plugin;
+
+		$groups = $plugin->settings->getGroups();
+
+		$groups = array_map(function($key, $value) {
+			$value['key'] = $key;
+			return $value;
+		}, array_keys($groups), $groups);
+
+		return $this->asJson([
+			'prompts' => Prompts::find()->all(),
+			'groups' => $groups
+		]);
 	}
 
 	public function actionEdit(?int $promptId = null): Response {
@@ -32,11 +44,18 @@ class PromptsController extends Controller {
 		$this->requireAdmin();
 
 		$craft = Craft::$app;
+		$plugin = GptContentGenerator::$plugin;
 		$request = $craft->getRequest();
 
 		$id = $request->getBodyParam('id');
 		$name = $request->getBodyParam('name');
 		$prompt = $request->getBodyParam('prompt');
+		$group = $request->getBodyParam('group');
+
+		// make sure the group exists
+		$groups = $plugin->settings->getGroups();
+		if (!isset($groups[$group]))
+			throw new \Error('group does not exist');
 
 		if (is_null($id))
 			$entry = new Prompts;
@@ -45,9 +64,10 @@ class PromptsController extends Controller {
 
 		$entry->name = $name;
 		$entry->prompt = $prompt;
+		$entry->group = $group;
 
 		if (!$entry->save())
-			throw new \Error("failed to update entry");
+			throw new \Error('failed to update entry');
 
 		return $this->asJson($entry);
 	}

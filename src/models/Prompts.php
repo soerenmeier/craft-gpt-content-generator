@@ -7,6 +7,7 @@ class Prompts extends ActiveRecord {
 	// public int $id;
 	// public string $name;
 	// public string $prompt;
+	// public string $group;
 
 	// prompt groups
 	// maybe defined in a config.php

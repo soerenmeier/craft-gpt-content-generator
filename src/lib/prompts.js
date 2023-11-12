@@ -1,6 +1,8 @@
 export default class Prompts {
-	constructor(list) {
-		this.list = list;
+	constructor(resp) {
+		this.list = resp.prompts;
+		// [{key, name}]
+		this.groups = resp.groups;
 	}
 
 	static async load() {
@@ -21,6 +23,7 @@ export default class Prompts {
 			data.set('id', prompt.id);
 		data.set('name', prompt.name);
 		data.set('prompt', prompt.prompt);
+		data.set('group', prompt.group);
 
 		const resp = await fetch(
 			'/actions/gpt-content-generator/prompts/save',
@@ -44,6 +47,7 @@ export default class Prompts {
 
 			p.name = prompt.name;
 			p.prompt = prompt.prompt;
+			p.group = prompt.group;
 			return true;
 		});
 		if (!updated)
