@@ -73,7 +73,7 @@ function filterField($field, $nesting = false): ?array {
 		case 'craft\fields\PlainText':
 		case 'craft\ckeditor\Field':
 		case 'craft\redactor\Field':
-		case 'craft\fields\Table':
+		// case 'craft\fields\Table':
 			return [
 				'id' => (string) $field->id,
 				'type' => $type,
@@ -82,7 +82,7 @@ function filterField($field, $nesting = false): ?array {
 			];
 
 		case 'craft\fields\Matrix':
-		case 'benf\neo\Field':
+		// case 'benf\neo\Field':
 			if (!$nesting)
 				return null;
 
@@ -91,7 +91,6 @@ function filterField($field, $nesting = false): ?array {
 			foreach ($field->blockTypeFields as $blockField) {
 				$nField = filterField($blockField, false);
 				if (!is_null($nField)) {
-					$nField['id'] = ((string) $field->id). '.'. $nField['id'];
 					$nField['handle'] = $field->handle. '.'. $nField['handle'];
 					$nField['name'] = $field->name. ': '. $nField['name'];
 					$nFields[] = $nField;

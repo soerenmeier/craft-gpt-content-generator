@@ -5,9 +5,10 @@ use Craft;
 use yii\base\Event;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\base\Field;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterCpNavItemsEvent;
-use craft\events\DefineFieldLayoutElementsEvent;
+use craft\events\DefineFieldHtmlEvent;
 use craft\services\Fields;
 use craft\models\FieldLayout;
 use craft\web\UrlManager;
@@ -47,6 +48,27 @@ class GptContentGenerator extends Plugin {
 					Craft::$app->getView()->registerAssetBundle(Assets::class);
 					$this->vite->register('src/main.js');
 				}
+			}
+		);
+
+		Event::on(
+			Field::class,
+			Field::EVENT_DEFINE_INPUT_HTML,
+			static function (DefineFieldHtmlEvent $event) {
+				$plugin = GptContentGenerator::$plugin;
+				$fieldGroups = $plugin->settings->fieldGroups;
+
+				$group = $fieldGroups[(string) $event->sender->id] ?? null;
+				if (!isset($group) || $group === '')
+					return;
+
+				$type = (new \ReflectionClass($event->sender))->name;
+
+				$event->html .= Craft::$app->view->renderTemplate('gpt-content-generator/fieldtag.twig', [
+					'event' => $event,
+					'group' => $group,
+					'type' => $type
+				] );
 			}
 		);
 

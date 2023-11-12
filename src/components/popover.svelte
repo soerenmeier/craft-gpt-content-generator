@@ -18,7 +18,7 @@
 	let generatedText = null;
 
 	function updatePosition() {
-		const rect = field.el.getBoundingClientRect();
+		const rect = field.input.cont.getBoundingClientRect();
 
 		const height = contEl.offsetHeight;
 
@@ -32,7 +32,7 @@
 		}
 
 		contEl.style.right = (window.innerWidth - rect.right) + 'px';
-		contEl.style.maxWidth = field.el.offsetWidth + 'px';
+		contEl.style.maxWidth = field.input.cont.offsetWidth + 'px';
 	}
 
 	function onScroll() {

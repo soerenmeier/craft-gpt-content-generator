@@ -9,7 +9,7 @@ class Settings extends Model {
 	/// {'groupKey': {name: 'MyGroup'}}
 	public array $groups = [];
 
-	/// ['id' => ['groupKey']]
+	/// ['id' => 'groupKey']
 	public array $fieldGroups = [];
 
 	public function getGroups() {

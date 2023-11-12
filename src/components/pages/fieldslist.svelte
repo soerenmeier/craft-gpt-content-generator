@@ -17,6 +17,7 @@
 
 		try {
 			await fields.saveFieldGroups(save);
+			window.location.reload();
 		} catch (e) {
 			console.log('could not save prompt');
 			alert('Could not save prompt');
