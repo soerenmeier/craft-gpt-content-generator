@@ -25,6 +25,7 @@
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Group</th>
 						<th>Prompt</th>
 						<th class="thin"></th>
 					</tr>
@@ -34,6 +35,9 @@
 						<tr>
 							<td>
 								<a href={url + '/prompts/' + prompt.id}>{prompt.name}</a>
+							</td>
+							<td>
+								<span class="light">{prompts.getGroup(prompt.group)?.name ?? ''}</span>
 							</td>
 							<td>
 								<span class="light">{prompt.prompt}</span>

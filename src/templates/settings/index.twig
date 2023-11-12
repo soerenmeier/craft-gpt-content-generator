@@ -1,0 +1,18 @@
+{% extends '_layouts/cp' %}
+{% set title = 'Settings' %}
+{% set selectedSubnavItem = 'settings' %}
+
+{% set fullPageForm = true %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% block content %}
+
+	{{ forms.autosuggestField({
+		label: 'ApiKey',
+		name: 'apiKey',
+		value: settings.apiKey,
+		suggestEnvVars: true
+	}) }}
+
+{% endblock %}

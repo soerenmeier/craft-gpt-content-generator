@@ -11,6 +11,16 @@ class PromptsController extends Controller {
 	protected array|int|bool $allowAnonymous = false;
 	public $enableCsrfValidation = false;
 
+	public function actionIndex(?int $promptId = null): Response {
+		return $this->renderTemplate('gpt-content-generator/prompts/index');
+	}
+
+	public function actionEdit(?int $promptId = null): Response {
+		return $this->renderTemplate('gpt-content-generator/prompts/edit', [
+			'promptId' => $promptId
+		]);
+	}
+
 	// actions/gpt-content-generator/prompts/get
 	public function actionGet() {
 		// $this->requireGetRequest();
@@ -30,13 +40,6 @@ class PromptsController extends Controller {
 			'groups' => $groups
 		]);
 	}
-
-	public function actionEdit(?int $promptId = null): Response {
-		return $this->renderTemplate('gpt-content-generator/prompts/edit', [
-			'promptId' => $promptId
-		]);
-	}
-	
 
 	// actions/gpt-content-generator/prompts/save
 	public function actionSave() {

@@ -17,6 +17,10 @@ export default class Prompts {
 		return this.list.find(p => p.id === id);
 	}
 
+	getGroup(key) {
+		return this.groups.find(g => g.key === key);
+	}
+
 	async save(prompt) {
 		const data = new FormData;
 		if (prompt.id)

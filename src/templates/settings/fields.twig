@@ -1,0 +1,18 @@
+{% extends '_layouts/cp.twig' %}
+{% set plHandle = 'gpt-content-generator' %}
+{% set title = 'Fields'|t(plHandle) %}
+{% set selectedSubnavItem = 'settings-fields' %}
+{% set saveShortcut = false %}
+{% set mainFormAttributes = { data: { 'confirm-unload': false } } %}
+
+{% set fullPageForm = true %}
+
+{% block submitButton %}
+	<button type="button" id="enable-all" class="btn">Enable all</button>
+	<button type="button" id="disable-all" class="btn">Disable all</button>
+	<button type="submit" class="btn submit">{{ submitButtonLabel ?? 'Save'|t('app') }}</button>
+{% endblock %}
+
+{% block content %}
+	<div id="gpt-fields-list" data-url="{{url('gpt-content-generator')}}"></div>
+{% endblock %}

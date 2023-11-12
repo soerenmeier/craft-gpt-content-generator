@@ -7,6 +7,9 @@ use craft\base\Model;
 use craft\base\Plugin;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterCpNavItemsEvent;
+use craft\events\DefineFieldLayoutElementsEvent;
+use craft\services\Fields;
+use craft\models\FieldLayout;
 use craft\web\UrlManager;
 use craft\web\View;
 use craft\web\twig\variables\CraftVariable;
@@ -65,6 +68,9 @@ class GptContentGenerator extends Plugin {
 			UrlManager::class,
 			UrlManager::EVENT_REGISTER_CP_URL_RULES,
 			function(RegisterUrlRulesEvent $event) {
+				$event->rules['gpt-content-generator/settings'] = 'gpt-content-generator/settings';
+
+				$event->rules['gpt-content-generator/prompts'] = 'gpt-content-generator/prompts';
 				$event->rules['gpt-content-generator/prompts/new'] = 'gpt-content-generator/prompts/edit';
 				$event->rules['gpt-content-generator/prompts/<promptId:\d+>'] = 'gpt-content-generator/prompts/edit';
 			}
@@ -94,12 +100,37 @@ class GptContentGenerator extends Plugin {
 		return new Settings();
 	}
 
-	protected function settingsHtml(): string {
-		return Craft::$app->getView()->renderTemplate(
-			'gpt-content-generator/settings',
-			[
-				'settings' => $this->getSettings()
-			]
-		);
+	public function getCpNavItem(): ?array {
+		$nav = parent::getCpNavItem();
+
+		$app = Craft::$app;
+
+		$nav['subnav']['prompts'] = [
+			'label' => 'Prompts',
+			'url' => 'gpt-content-generator/prompts',
+		];
+
+		if (
+			$app->getUser()->getIsAdmin() &&
+			$app->getConfig()->getGeneral()->allowAdminChanges
+		) {
+			$nav['subnav']['settings-fields'] = [
+				'label' => 'Fields',
+				'url' => 'gpt-content-generator/settings/fields',
+			];
+
+			$nav['subnav']['settings'] = [
+				'label' => 'Settings',
+				'url' => 'gpt-content-generator/settings',
+			];
+		}
+
+		return $nav;
+	}
+
+	public function getSettingsResponse(): mixed {
+		return Craft::$app->controller->redirect(
+			'gpt-content-generator/settings'
+	);
 	}
 }

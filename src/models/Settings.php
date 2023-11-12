@@ -9,6 +9,9 @@ class Settings extends Model {
 	/// {'groupKey': {name: 'MyGroup'}}
 	public array $groups = [];
 
+	/// ['id' => ['groupKey']]
+	public array $fieldGroups = [];
+
 	public function getGroups() {
 		return array_merge([
 			'default' => [

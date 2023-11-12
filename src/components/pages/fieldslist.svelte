@@ -2,16 +2,21 @@
 	import { onMount } from 'svelte';
 
 	export let prompts;
+	export let fields;
 	export let form;
-	export let id;
-	export let url;
+	export let enableAll;
+	export let disableAll;
 
-	let prompt = id ? prompts.get(id) : {};
+	let combined = fields.getCombined();
 
 	async function save() {
+		const save = {};
+		for (const field of combined) {
+			save[field.id] = field.group;
+		}
+
 		try {
-			await prompts.save(prompt);
-			window.location = url;
+			await fields.saveFieldGroups(save);
 		} catch (e) {
 			console.log('could not save prompt');
 			alert('Could not save prompt');
@@ -19,7 +24,7 @@
 	}
 
 	onMount(() => {
-		form.addEventListener('submit', async e => {
+		form.addEventListener('submit', e => {
 			e.preventDefault();
 
 			save();
@@ -34,11 +39,56 @@
 			save();
 		});
 
-		form.removeAttribute('data-confirm-unload');
+		enableAll.addEventListener('click', e => {
+			combined = combined.map(c => {
+				if (!c.group)
+					c.group = 'default';
+				return c;
+			});
+		});
+
+		disableAll.addEventListener('click', e => {
+			combined = combined.map(c => {
+				c.group = '';
+				return c;
+			});
+		});
 	});
 </script>
 
-<div class="field">
+<div class="tableview tablepane">
+	<table class="data fullwidth">
+		<thead>
+			<tr>
+				<th scope="col">Label</th>
+				<th scope="col">Handle</th>
+				<th scope="col">Field type</th>
+				<th scope="col">Group</th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each combined as field}
+				<tr class="s-10">
+					<td>{field.name}</td>
+					<td>{field.handle}</td>
+					<td>{field.type}</td>
+					<td>
+						<div class="select">
+							<select id="group" name="group" bind:value={field.group}>
+								<option value=""></option>
+								{#each prompts.groups as group}
+									<option value={group.key}>{group.name}</option>
+								{/each}
+							</select>
+						</div>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
+
+<!-- <div class="field">
 	<div class="heading">
 		<label for="gpt-prompt-name">Name</label>
 	</div>
@@ -89,4 +139,4 @@
 			</select>
 		</div>
 	</div>
-</div>
+</div> -->

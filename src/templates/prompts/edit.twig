@@ -3,6 +3,8 @@
 {% set title = 'Edit Prompts'|t(plHandle) %}
 
 {% set fullPageForm = true %}
+{% set saveShortcut = false %}
+{% set mainFormAttributes = { data: { 'confirm-unload': false } } %}
 
 {% set crumbs = [
 	{ label: 'Prompts'|t('app'), url: url('gpt-content-generator') }

@@ -1,9 +1,11 @@
 import './style.scss';
 import PopOverMan from './lib/popoverman.js';
 import Prompts from './lib/prompts.js';
+import Fields from './lib/fields.js';
 import { Input, Textarea } from './lib/field.js';
 import PromptsTable from './components/pages/promptstable.svelte';
 import PromptsEdit from './components/pages/promptsedit.svelte';
+import FieldsList from './components/pages/fieldslist.svelte';
 
 const KEY = 'gptvis';
 const popOverMan = new PopOverMan;
@@ -93,6 +95,32 @@ function initPromptsEdit(prompts) {
 	});
 }
 
+async function initFieldsList(prompts) {
+	const fieldsList = document.getElementById('gpt-fields-list');
+	if (!fieldsList)
+		return;
+
+	// load fields
+	const fields = await Fields.load();
+
+	const form = document.getElementById('main-form');
+	form.removeAttribute('novalidate');
+
+	const enableAll = document.getElementById('enable-all');
+	const disableAll = document.getElementById('disable-all');
+
+	new FieldsList({
+		target: fieldsList,
+		props: {
+			prompts,
+			fields,
+			form,
+			enableAll,
+			disableAll
+		}
+	});
+}
+
 async function main() {
 	const prompts = await Prompts.load();
 	// popOverMan.setPrompts(prompts);
@@ -106,5 +134,6 @@ async function main() {
 
 	initPromptsList(prompts);
 	initPromptsEdit(prompts);
+	initFieldsList(prompts);
 }
 main();
