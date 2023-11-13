@@ -15,8 +15,7 @@ class GptService extends Component
 	// private $apiKey;
 	private $apiEndpoint;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->httpClient = new Client();
 	}
 
@@ -72,7 +71,7 @@ class GptService extends Component
 			return $content['choices'][0]['message']['content'] ?? null;
 		} catch (GuzzleException $e) {
 			Craft::error('Failed to generate content with GPT: ' . $e->getMessage(), __METHOD__);
-			return null;
+			throw $e;
 		}
 	}
 }

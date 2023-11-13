@@ -134,6 +134,9 @@ class PromptsController extends Controller {
 		try {
 			$twig = $craft->getView()->getTwig();
 			$template = $twig->createTemplate($prompt);
+
+			// todo add siteId to context
+
 			$prompt = $template->render([
 				'field' => $context['field'] ?? []
 			]);
@@ -142,8 +145,12 @@ class PromptsController extends Controller {
 			return $this->asErrorJson($e->getMessage());
 		}
 
-		$res = $plugin->gptService->generateContent($prompt);
+		try {
+			$res = $plugin->gptService->generateContent($prompt);
 
-		return $this->asJson($res);
+			return $this->asJson($res);
+		} catch (\Exception $e) {
+			return $this->asErrorJson($e->getMessage());
+		}
 	}
 }

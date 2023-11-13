@@ -4,6 +4,7 @@ namespace soerenmeier\gptcontentgenerator\controllers;
 use soerenmeier\gptcontentgenerator\GptContentGenerator;
 use Craft;
 use craft\web\Controller;
+use craft\web\Response;
 
 class SettingsController extends Controller {
 	protected array|int|bool $allowAnonymous = false;
@@ -27,7 +28,7 @@ class SettingsController extends Controller {
 		}
 
 		return $this->renderTemplate('gpt-content-generator/settings/index', [
-			'settings' => $settings
+			'settings' => GptContentGenerator::$plugin->settings
 		]);
 	}
 

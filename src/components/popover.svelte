@@ -45,7 +45,11 @@
 		if (dif < 100)
 			return;
 
-		console.log('e', e);
+		if (contEl.contains(e.target) || !document.body.contains(e.target))
+			return;
+
+		// else let's close the prompt
+		dispatch('close');
 	}
 
 	async function onNewPrompt(e) {
@@ -67,8 +71,6 @@
 	function onPromptSave(e) {
 		const prompt = e.detail.prompt;
 		prompts = prompts;
-		// if ('id' in prompt)
-		// 	prompts = prompts.save(prompt);
 
 		editPrompt = null;
 	}
