@@ -35,6 +35,15 @@ export default class Prompts {
 		return this.list.filter(p => p.group === key);
 	}
 
+	canViewGroup(key) {
+		return !!this.getGroup(key);
+	}
+
+	canEditGroup(key) {
+		const group = this.getGroup(key);
+		return group?.canEdit ?? false;
+	}
+
 	getGroup(key) {
 		return this.groups.find(g => g.key === key);
 	}

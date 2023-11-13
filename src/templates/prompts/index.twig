@@ -1,9 +1,13 @@
+{% requirePermission 'gpt-cg-view' %}
+
 {% extends '_layouts/cp.twig' %}
 {% set plHandle = 'gpt-content-generator' %}
 {% set title = 'Prompts'|t(plHandle) %}
 
 {% block actionButton %}
-	<a class="btn submit add icon" href="{{url('gpt-content-generator/prompts/new')}}">{{ "New prompt"|t('app') }}</a>
+	{% if canEdit %}
+		<a class="btn submit add icon" href="{{url('gpt-content-generator/prompts/new')}}">{{ "New prompt"|t('app') }}</a>
+	{% endif %}
 {% endblock %}
 
 {% block content %}

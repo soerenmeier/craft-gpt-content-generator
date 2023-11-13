@@ -34,7 +34,11 @@
 					{#each prompts.list as prompt}
 						<tr>
 							<td>
-								<a href={url + '/prompts/' + prompt.id}>{prompt.name}</a>
+								{#if prompts.canEditGroup(prompt.group)}
+									<a href={url + '/prompts/' + prompt.id}>{prompt.name}</a>
+								{:else}
+									{prompt.name}
+								{/if}
 							</td>
 							<td>
 								<span class="light">{prompts.getGroup(prompt.group)?.name ?? ''}</span>
@@ -43,7 +47,9 @@
 								<span class="light">{prompt.prompt}</span>
 							</td>
 							<td>
-								<a title="Delete" role="button" href="#" class="delete icon" on:click|preventDefault={e => onDelete(e, prompt)}></a>
+								{#if prompts.canEditGroup(prompt.group)}
+									<a title="Delete" role="button" href="#" class="delete icon" on:click|preventDefault={e => onDelete(e, prompt)}></a>
+								{/if}
 							</td>
 						</tr>
 					{/each}

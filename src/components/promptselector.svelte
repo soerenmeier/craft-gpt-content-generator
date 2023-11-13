@@ -21,23 +21,27 @@
 					type="button"
 					on:click={e => dispatch('select', { prompt })}
 				>{prompt.name}</button>
-				<button
-					type="button"
-					class="edit"
-					data-icon="edit"
-					on:click={e => dispatch('edit', { prompt })}
-				></button>
-				<button
-					type="button"
-					class="delete"
-					data-icon="trash"
-					on:click={e => dispatch('delete', { prompt })}
-				></button>
+				{#if prompts.canEditGroup(group)}
+					<button
+						type="button"
+						class="edit"
+						data-icon="edit"
+						on:click={e => dispatch('edit', { prompt })}
+					></button>
+					<button
+						type="button"
+						class="delete"
+						data-icon="trash"
+						on:click={e => dispatch('delete', { prompt })}
+					></button>
+				{/if}
 			</div>
 		{/each}
 	</div>
 
-	<button type="button" class="btn" on:click={onNewPrompt}>+ New Prompt</button>
+	{#if prompts.canEditGroup(group)}
+		<button type="button" class="btn" on:click={onNewPrompt}>+ New Prompt</button>
+	{/if}
 </div>
 
 <style lang="scss">

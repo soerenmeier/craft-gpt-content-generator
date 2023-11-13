@@ -31,7 +31,7 @@
 
 			e.preventDefault();
 
-			save();
+			form.querySelector('[type="submit"]').click();
 		});
 
 		form.removeAttribute('data-confirm-unload');
@@ -80,7 +80,7 @@
 	<div class="input ltr">
 		<div class="select">
 			<select id="group" name="group" required bind:value={prompt.group}>
-				{#each prompts.groups as group}
+				{#each prompts.groups.filter(g => g.canEdit) as group}
 					<option
 						value={group.key}
 						selected={prompt.group ? null : (group.key === 'default')}

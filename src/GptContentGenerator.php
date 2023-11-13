@@ -9,7 +9,9 @@ use craft\base\Field;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\DefineFieldHtmlEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\services\Fields;
+use craft\services\UserPermissions;
 use craft\models\FieldLayout;
 use craft\web\UrlManager;
 use craft\web\View;
@@ -56,10 +58,11 @@ class GptContentGenerator extends Plugin {
 			Field::EVENT_DEFINE_INPUT_HTML,
 			static function (DefineFieldHtmlEvent $event) {
 				$plugin = GptContentGenerator::$plugin;
+				$user = Craft::$app->user;
 				$fieldGroups = $plugin->settings->fieldGroups;
 
 				$group = $fieldGroups[(string) $event->sender->id] ?? null;
-				if (!isset($group) || $group === '')
+				if (!isset($group) || $group === '' || !$user->checkPermission('gpt-cg-view-'. $group))
 					return;
 
 				$type = (new \ReflectionClass($event->sender))->name;
@@ -69,6 +72,35 @@ class GptContentGenerator extends Plugin {
 					'group' => $group,
 					'type' => $type
 				] );
+			}
+		);
+
+		Event::on(
+			UserPermissions::class,
+			UserPermissions::EVENT_REGISTER_PERMISSIONS,
+			function(RegisterUserPermissionsEvent $event) {
+				$permissions = [
+					'gpt-cg-view' => [
+						'label' => 'View and execute prompts'
+					]
+				];
+
+				foreach ($this->settings->getGroups() as $group => $groupVal) {
+					$permissions['gpt-cg-view-'. $group] = [
+						'label' => 'View and execute prompts in group '. $groupVal['name']
+					];
+				}
+
+				foreach ($this->settings->getGroups() as $group => $groupVal) {
+					$permissions['gpt-cg-edit-'. $group] = [
+						'label' => 'Edit prompts in group '. $groupVal['name']
+					];
+				}
+
+				$event->permissions[] = [
+					'heading' => 'GPT Content Generator',
+					'permissions' => $permissions
+				];
 			}
 		);
 
@@ -123,9 +155,12 @@ class GptContentGenerator extends Plugin {
 	}
 
 	public function getCpNavItem(): ?array {
-		$nav = parent::getCpNavItem();
-
 		$app = Craft::$app;
+
+		if (!$app->user->checkPermission('gpt-cg-view'))
+			return null;
+
+		$nav = parent::getCpNavItem();
 
 		$nav['subnav']['prompts'] = [
 			'label' => 'Prompts',

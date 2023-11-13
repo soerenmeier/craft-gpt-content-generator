@@ -26,7 +26,7 @@ function newFieldGen(group, type) {
 function scanStaticFields(form, prompts) {
 	let title = form.querySelector('input[name=title]');
 	const titleGroup = prompts.getFieldGroup('title');
-	if (title && titleGroup) {
+	if (title && titleGroup && prompts.canViewGroup(titleGroup)) {
 		const el = newFieldGen(titleGroup, 'craft\\fields\\PlainText');
 		title.parentNode.appendChild(el);
 		title = new Field(el);
