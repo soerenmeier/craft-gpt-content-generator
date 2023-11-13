@@ -135,11 +135,16 @@ class PromptsController extends Controller {
 			$twig = $craft->getView()->getTwig();
 			$template = $twig->createTemplate($prompt);
 
+			$variables = [
+				'field' => $context['field'] ?? []
+			];
+
+			if (isset($context['siteId']))
+				$variables['currentSite'] = $craft->sites->getSiteById($context['siteId']);
+
 			// todo add siteId to context
 
-			$prompt = $template->render([
-				'field' => $context['field'] ?? []
-			]);
+			$prompt = $template->render($variables);
 		} catch (\Exception $e) {
 			Craft::error('gpt twig error: ' . $e->getMessage());
 			return $this->asErrorJson($e->getMessage());

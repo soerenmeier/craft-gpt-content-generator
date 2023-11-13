@@ -51,7 +51,7 @@
 				<label for="gpt-prompt-prompt">Prompt</label>
 			</div>
 			<div class="instructions">
-				<p>Use <code>{'{{field.value}}'}</code> to insert the value into the prompt. Other properties <code>{'{{field.name}}'}</code>, <code>{'{{field.label}}'}</code>, <code>{'{{field.instructions}}'}</code>.</p>
+				<p>Use <code>{'{{field.value}}'}</code> to insert the value into the prompt. Other properties <code>{'{{field.name}}'}</code>, <code>{'{{field.label}}'}</code>, <code>{'{{field.instructions}}'}</code>. To get the current language you can use the site object <code>{'{{currentSite}}'}</code>.</p>
 			</div>
 			<div class="input ltr">
 				<textarea

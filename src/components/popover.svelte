@@ -116,6 +116,9 @@
 				}
 			};
 
+			if (window?.Craft?.siteId)
+				ctx.siteId = Craft.siteId;
+
 			generatePrompt = {
 				prompt,
 				ctx
