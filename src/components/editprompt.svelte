@@ -20,6 +20,7 @@
 
 			dispatch('save', { prompt: nPrompt });
 		} catch (e) {
+			console.log('could not save prompt', e);
 			alert('Could not save prompt');
 		}
 	}
@@ -50,7 +51,7 @@
 				<label for="gpt-prompt-prompt">Prompt</label>
 			</div>
 			<div class="instructions">
-				<p>Use <code>{'{{fieldValue}}'}</code> to insert the value into the prompt. Other properties <code>{'{{fieldName}}'}</code>, <code>{'{{fieldLabel}}'}</code>, <code>{'{{fieldInstructions}}'}</code>.</p>
+				<p>Use <code>{'{{field.value}}'}</code> to insert the value into the prompt. Other properties <code>{'{{field.name}}'}</code>, <code>{'{{field.label}}'}</code>, <code>{'{{field.instructions}}'}</code>.</p>
 			</div>
 			<div class="input ltr">
 				<textarea

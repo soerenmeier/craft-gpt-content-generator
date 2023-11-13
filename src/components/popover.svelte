@@ -3,6 +3,7 @@
 	import PromptSelector from './promptselector.svelte';
 	import EditPrompt from './editprompt.svelte';
 	import GeneratedText from './generatedtext.svelte';
+	import { isPromptsError } from '../lib/prompts.js';
 
 	// input or textarea
 	export let field;
@@ -50,7 +51,8 @@
 	async function onNewPrompt(e) {
 		editPrompt = {
 			name: '',
-			prompt: ''
+			prompt: '',
+			group: field.group
 		};
 		await tick();
 		updatePosition();
@@ -96,24 +98,38 @@
 
 	function onRegenerate(e) {
 		generatedText = null;
-		generate(generatePrompt);
+		generate(generatePrompt, false);
 	}
 
-	async function generate(prompt) {
-		// replace some stuff with actual data
-		prompt = prompt.replaceAll('{{fieldName}}', field.name())
-			.replaceAll('{{fieldLabel}}', field.label())
-			.replaceAll('{{fieldInstructions}}', field.instructions())
-			.replaceAll('{{fieldValue}}', field.value());
-
+	async function generate(prompt, isNew = true) {
 		generateError = null;
-		generatePrompt = prompt;
+
+		if (isNew) {
+			const ctx = {
+				field: {
+					name: field.name(),
+					label: field.label(),
+					instructions: field.instructions(),
+					value: field.value()
+				}
+			};
+
+			generatePrompt = {
+				prompt,
+				ctx
+			};
+		}
 
 		try {
-			generatedText = await prompts.execute(prompt);
+			generatedText = await prompts.execute(
+				generatePrompt.prompt,
+				generatePrompt.ctx
+			);
 		} catch (e) {
-			console.log('failed to generate');
-			generateError = 'could not generate';
+			if (isPromptsError(e))
+				generateError = e.message;
+			else
+				generateError = 'could not generate';
 		}
 	}
 
@@ -132,16 +148,20 @@
 				text={generatedText}
 				on:accept={onAccept}
 				on:regenerate={onRegenerate}
-				on:cancel={e => generatedText = null}
+				on:cancel={e => {
+					generatedText = null;
+					generatePrompt = null;
+				}}
 			/>
 		{:else if generatePrompt}
-			<p>Generating...</p>
-
 			{#if generateError}
-				<p>Failed to generate</p>
+				<p>{generateError}</p>
+			{:else}
+				<p>Generating...</p>
 			{/if}
 		{:else if editPrompt}
 			<EditPrompt
+				{prompts}
 				prompt={editPrompt}
 				on:save={onPromptSave}
 				on:cancel={e => editPrompt = null}
@@ -149,6 +169,7 @@
 		{:else}
 			<PromptSelector
 				{prompts}
+				group={field.group}
 				on:new={onNewPrompt}
 				on:select={onSelectPrompt}
 				on:edit={onPromptEdit}

@@ -1,3 +1,16 @@
+export class PromptsError extends Error {
+	constructor(msg) {
+		super(msg);
+	}
+
+	__promptsError__() {}
+}
+
+export function isPromptsError(e) {
+	return typeof e === 'object' && e !== null &&
+		typeof e.__promptsError__ === 'function';
+}
+
 export default class Prompts {
 	constructor(resp) {
 		this.list = resp.prompts;
@@ -16,6 +29,10 @@ export default class Prompts {
 	get(id) {
 		id = parseInt(id);
 		return this.list.find(p => p.id === id);
+	}
+
+	getByGroup(key) {
+		return this.list.filter(p => p.group === key);
 	}
 
 	getGroup(key) {
@@ -88,9 +105,10 @@ export default class Prompts {
 	}
 
 	// finalPrompt: str
-	async execute(finalPrompt) {
+	async execute(finalPrompt, ctx) {
 		const data = new FormData;
 		data.set('prompt', finalPrompt);
+		data.set('context', JSON.stringify(ctx));
 		
 		const resp = await fetch(
 			'/actions/gpt-content-generator/prompts/execute',
@@ -105,6 +123,11 @@ export default class Prompts {
 		if (!resp.ok)
 			throw new Error('not ok');
 
-		return await resp.json();
+		const json = await resp.json();
+
+		if (json?.error)
+			throw new PromptsError(json.error);
+
+		return json;
 	}
 }

@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let prompts;
+	export let group;
 
 	const dispatch = createEventDispatcher();
 
@@ -14,7 +15,7 @@
 	<h5>Select a prompt</h5>
 
 	<div class="list">
-		{#each prompts.list as prompt}
+		{#each prompts.getByGroup(group) as prompt}
 			<div class="prompt">
 				<button
 					type="button"

@@ -103,6 +103,19 @@ class PromptsController extends Controller {
 		$request = $craft->getRequest();
 
 		$prompt = $request->getBodyParam('prompt');
+		$context = $request->getBodyParam('context');
+		$context = json_decode($context, true);
+
+		try {
+			$twig = $craft->getView()->getTwig();
+			$template = $twig->createTemplate($prompt);
+			$prompt = $template->render([
+				'field' => $context['field'] ?? []
+			]);
+		} catch (\Exception $e) {
+			Craft::error('gpt twig error: ' . $e->getMessage());
+			return $this->asErrorJson($e->getMessage());
+		}
 
 		$res = $plugin->gptService->generateContent($prompt);
 
