@@ -18,10 +18,6 @@ class GptService extends Component
 	public function __construct()
 	{
 		$this->httpClient = new Client();
-		// Retrieve your API key from a secure location, like an environment variable
-		// $this->apiKey = getenv('GPT_API_KEY');
-		// Set the API endpoint URL
-		$this->apiEndpoint = 'https://api.openai.com/v1/engines/davinci-codex/completions';
 	}
 
 	/**
@@ -44,6 +40,10 @@ class GptService extends Component
 			'content' => $prompt
 		];
 
+		$model = $plugin->settings->gptModel;
+		if ($model === 'default')
+			$model = 'gpt-4-1106-preview';
+
 		try {
 			$response = $this->httpClient->post(
 				'https://api.openai.com/v1/chat/completions',
@@ -53,10 +53,10 @@ class GptService extends Component
 						'Content-Type' => 'application/json'
 					],
 					'json' => [
-						'model' => 'gpt-4-1106-preview',
-						'messages' => $messages
+						'model' => $model,
+						'messages' => $messages,
 						// 'temperature' => 1,
-						// 'max_tokens' => 256,
+						'max_tokens' => $plugin->settings->maxTokens
 						// 'top_p' => 1,
 						// 'frequency_penalty' => 0,
 						// 'presence_penalty' => 0
@@ -66,30 +66,6 @@ class GptService extends Component
 
 			$body = $response->getBody();
 			$content = json_decode($body, true);
-
-/*
-{
-  "id": "chatcmpl-8JiimhCzsrc8dnstAVDXhN8UhwxY6",
-  "object": "chat.completion",
-  "created": 1699710832,
-  "model": "gpt-3.5-turbo-16k-0613",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "Bonjour, je m'appelle Frank et je veux dire quelque chose."
-      },
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 44,
-    "completion_tokens": 15,
-    "total_tokens": 59
-  }
-}
-*/
 
 			Craft::info('gpt response: '. $body);
 

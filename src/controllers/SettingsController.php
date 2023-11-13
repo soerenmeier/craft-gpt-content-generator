@@ -10,7 +10,21 @@ class SettingsController extends Controller {
 	public $enableCsrfValidation = false;
 
 	public function actionIndex(): Response {
-		$settings = GptContentGenerator::$plugin->settings;
+		$craft = Craft::$app;
+		$plugin = GptContentGenerator::$plugin;
+		$settings = $plugin->settings;
+		$request = $craft->getRequest();
+
+		if ($request->method === 'POST') {
+			$apiKey = $request->getBodyParam('apiKey');
+			$gptModel = $request->getBodyParam('gptModel');
+			$maxTokens = (int) $request->getBodyParam('maxTokens');
+
+			$settings->apiKey = $apiKey;
+			$settings->gptModel = $gptModel;
+			$settings->maxTokens = $maxTokens;
+			$craft->plugins->savePluginSettings($plugin, []);
+		}
 
 		return $this->renderTemplate('gpt-content-generator/settings/index', [
 			'settings' => $settings

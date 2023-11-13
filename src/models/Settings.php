@@ -6,6 +6,10 @@ use craft\base\Model;
 class Settings extends Model {
 	public string $apiKey = '';
 
+	public string $gptModel = 'default';
+
+	public int $maxTokens = 256;
+
 	/// {'groupKey': {name: 'MyGroup'}}
 	public array $groups = [];
 
@@ -22,7 +26,9 @@ class Settings extends Model {
 
 	public function rules(): array {
 		return [
-			[['apiKey'], 'string']
+			[['apiKey'], 'string'],
+			[['gptModel'], 'string'],
+			[['maxTokens'], 'number']
 		];
 	}
 }
