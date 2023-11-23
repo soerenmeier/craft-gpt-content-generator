@@ -110,6 +110,8 @@ export class PlainText extends Input {
 		if (this.el.nodeName.toLowerCase() === 'input')
 			icon.classList.add('gpt-align-center');
 		this.cont.appendChild(icon);
+
+		this.el.style.paddingRight = '30px';
 	}
 }
 

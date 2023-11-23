@@ -40,8 +40,12 @@ export default class Prompts {
 	}
 
 	canEditGroup(key) {
+		const isAdmin = typeof Craft === 'object' && Craft.userIsAdmin;
+
 		const group = this.getGroup(key);
-		return group?.canEdit ?? false;
+		const canEdit = group?.canEdit ?? false;
+
+		return canEdit || isAdmin;
 	}
 
 	getGroup(key) {

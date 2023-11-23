@@ -33,10 +33,14 @@
 		}
 
 		contEl.style.right = (window.innerWidth - rect.right) + 'px';
-		contEl.style.maxWidth = field.input.cont.offsetWidth + 'px';
+		contEl.style.maxWidth = Math.min(800, field.input.cont.offsetWidth) + 'px';
 	}
 
 	function onScroll() {
+		updatePosition();
+	}
+
+	function onResize() {
 		updatePosition();
 	}
 
@@ -144,7 +148,11 @@
 	});
 </script>
 
-<svelte:window on:scroll={onScroll} on:click={onWindowClick} />
+<svelte:window
+	on:scroll={onScroll}
+	on:resize={onResize}
+	on:click={onWindowClick}
+/>
 
 <div class="gpt-popover-cont" bind:this={contEl}>
 	<div class="gpt-popover">
