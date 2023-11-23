@@ -62,7 +62,11 @@ class GptContentGenerator extends Plugin {
 				$fieldGroups = $plugin->settings->fieldGroups;
 
 				$group = $fieldGroups[(string) $event->sender->id] ?? null;
-				if (!isset($group) || $group === '' || !$user->checkPermission('gpt-cg-view-'. $group))
+				if (
+					!isset($group) || $group === '' ||
+					!$user->checkPermission('gpt-cg-view-'. $group) ||
+					!isset($plugin->settings->getGroups()[$group])
+				)
 					return;
 
 				$type = (new \ReflectionClass($event->sender))->name;
