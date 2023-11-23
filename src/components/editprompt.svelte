@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import LightSwitch from './lightswitch.svelte';
+	import PromptInstructions from './promptinstructions.svelte';
 
 	export let prompts;
 	export let prompt;
@@ -51,7 +52,7 @@
 				<label for="gpt-prompt-prompt">Prompt</label>
 			</div>
 			<div class="instructions">
-				<p>Use <code>{'{{field.value}}'}</code> to insert the value into the prompt. Other properties <code>{'{{field.name}}'}</code>, <code>{'{{field.label}}'}</code>, <code>{'{{field.instructions}}'}</code>. To get the current language you can use the site object <code>{'{{currentSite}}'}</code>.</p>
+				<PromptInstructions />
 			</div>
 			<div class="input ltr">
 				<textarea
@@ -85,10 +86,6 @@
 <style lang="scss">
 	.editprompt h5 {
 		margin-bottom: 20px;
-	}
-
-	code {
-		font-style: italic;
 	}
 </style>
 
