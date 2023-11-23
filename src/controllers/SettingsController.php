@@ -17,9 +17,22 @@ class SettingsController extends Controller {
 		$request = $craft->getRequest();
 
 		if ($request->method === 'POST') {
+			$groups = $request->getBodyParam('groups');
+			if (!is_array($groups)) {
+				$groups = [];
+			}
 			$apiKey = $request->getBodyParam('apiKey');
 			$gptModel = $request->getBodyParam('gptModel');
 			$maxTokens = (int) $request->getBodyParam('maxTokens');
+
+			// $groups = [['key', 'name']]
+			$settings->groups = [];
+
+			foreach ($groups as $group) {
+				$settings->groups[$group['key']] = [
+					'name' => $group['name']
+				];
+			}
 
 			$settings->apiKey = $apiKey;
 			$settings->gptModel = $gptModel;

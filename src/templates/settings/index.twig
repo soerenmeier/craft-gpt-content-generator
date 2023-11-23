@@ -8,20 +8,26 @@
 
 {% block content %}
 
-	<h3>Groups</h3>
-	<div class="instructions">
-		<p>To edit groups modify the configuration PHP file. Simply create <code style="font-weight: bold;">config/gpt-content-generator.php</code> and include the following content.</p>
-		<pre>
-&lt;?php
-return [
-	'groups' => [
-		'testGroup' => [
-			'name' => 'Test Group'
-		]
-	]
-];
-		</pre>
-	</div>
+	{{ forms.editableTableField({
+		label: 'Groups',
+		instructions: 'Create and remove groups.',
+		id: 'groups',
+		name: 'groups',
+		cols: {
+			key: {
+				type: 'singleline',
+				heading: 'Key'
+			},
+			name: {
+				type: 'singleline',
+				heading: 'Name'
+			}
+		},
+		allowAdd: true,
+		allowReorder: true,
+		allowDelete: true,
+		rows: settings.groups|map((v, k) => { key: k, name: v.name })
+	}) }}
 
 	{{ forms.autosuggestField({
 		label: 'Api Key',
