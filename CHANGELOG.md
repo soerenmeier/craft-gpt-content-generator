@@ -1,5 +1,10 @@
 # Release Notes for GPT Content Generator
 
+## 1.1.1 - 2023-12-08
+- Add new icon, thanks Sandro!
+- Add some prompt examples
+- Improve group edit table
+
 ## 1.1.0 - 2023-11-24
 
 ### Features

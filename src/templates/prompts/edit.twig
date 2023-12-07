@@ -14,4 +14,15 @@
 
 {% block content %}
 	<div id="prompts-edit" data-id="{{promptId}}" data-url="{{url('gpt-content-generator')}}"></div>
+
+	<div class="prompt-examples" style="margin-top: 2rem">
+		{# <p><strong>Example</strong></p> #}
+		<h2>Examples</h2>
+
+		<p><strong>Translate:</strong><br>
+		Translate the following content into the language <i>{{"{{currentSite.language}}"}}</i> keeping all html tags:<br><i>{{"{{field.value|raw}}"}}</i></p>
+
+		<p><strong>Spelling:</strong><br>
+		Fix all spelling mistakes in the following text:<br><i>{{"{{field.value|raw}}"}}</i></p>
+	</div>
 {% endblock %}
