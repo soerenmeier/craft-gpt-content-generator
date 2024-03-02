@@ -60,6 +60,8 @@ function whichEditPath() {
 		return 'globals';
 	if (p.startsWith('entries/') && p.split('/').length > 2)
 		return 'entries';
+	if (p.startsWith('edit/'))
+		return 'entries';
 
 	return null;
 
@@ -78,15 +80,15 @@ export function init(prompts) {
 
 	const form = document.getElementById('main-form');
 
-	console.log('on Page', page);
-
 	// Craft.siteId Craft.sites
 
 	scanStaticFields(form, prompts);
-	scanFields(form, prompts);
+	scanFields(document.body);
 
 	document.addEventListener('click', e => {
 		// rescan inputs for example if i click to add a matrix field
-		scanFields(form);
+		setTimeout(() => {
+			scanFields(document.body);
+		}, 500);
 	});
 }

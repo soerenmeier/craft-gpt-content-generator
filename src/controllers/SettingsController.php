@@ -116,23 +116,6 @@ function filterField($field, $nesting = false): ?array {
 				'name' => $field->name
 			];
 
-		case 'craft\fields\Matrix':
-		// case 'benf\neo\Field':
-			if (!$nesting)
-				return null;
-
-			$nFields = [];
-
-			foreach ($field->blockTypeFields as $blockField) {
-				$nField = filterField($blockField, false);
-				if (!is_null($nField)) {
-					$nField['handle'] = $field->handle. '.'. $nField['handle'];
-					$nField['name'] = $field->name. ': '. $nField['name'];
-					$nFields[] = $nField;
-				}
-			}
-
-			return $nFields;
 		// nystudio107\seomatic\fields\SeoSettings
 
 		default:
