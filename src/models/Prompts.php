@@ -1,9 +1,11 @@
 <?php
+
 namespace soerenmeier\gptcontentgenerator\models;
 
 use craft\db\ActiveRecord;
 
-class Prompts extends ActiveRecord {
+class Prompts extends ActiveRecord
+{
 	// public int $id;
 	// public string $name;
 	// public string $prompt;
@@ -12,7 +14,8 @@ class Prompts extends ActiveRecord {
 	// prompt groups
 	// maybe defined in a config.php
 
-	public static function tableName() {
+	public static function tableName()
+	{
 		return '{{%gpt_content_prompts}}';
 	}
 

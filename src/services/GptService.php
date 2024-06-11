@@ -15,7 +15,8 @@ class GptService extends Component
 	// private $apiKey;
 	private $apiEndpoint;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->httpClient = new Client();
 	}
 
@@ -25,7 +26,8 @@ class GptService extends Component
 	 * @param string $prompt The prompt to send to the GPT model.
 	 * @return string|null The generated content or null if an error occurs.
 	 */
-	public function generateContent(string $prompt): ?string {
+	public function generateContent(string $prompt): ?string
+	{
 		$plugin = GptContentGenerator::$plugin;
 		$apiKey = App::parseEnv($plugin->settings->apiKey);
 
@@ -79,7 +81,7 @@ class GptService extends Component
 			$body = $response->getBody();
 			$content = json_decode($body, true);
 
-			Craft::info('gpt response: '. $body);
+			Craft::info('gpt response: ' . $body);
 
 			return $content['choices'][0]['message']['content'] ?? null;
 		} catch (GuzzleException $e) {

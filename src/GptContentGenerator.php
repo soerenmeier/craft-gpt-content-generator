@@ -1,4 +1,5 @@
 <?php
+
 namespace soerenmeier\gptcontentgenerator;
 
 use Craft;
@@ -24,23 +25,26 @@ use soerenmeier\gptcontentgenerator\assetbundles\Assets;
 use soerenmeier\gptcontentgenerator\variables\ViteAssets;
 
 
-class GptContentGenerator extends Plugin {
+class GptContentGenerator extends Plugin
+{
 	public static $plugin;
 
 	public bool $hasCpSettings = true;
 	public bool $hasCpSection = true;
 
-	public function init() {
+	public function init()
+	{
 		parent::init();
 		self::$plugin = $this;
 
 		// Defer most setup tasks until Craft is fully initialized
-		Craft::$app->onInit(function() {
+		Craft::$app->onInit(function () {
 			$this->attachEventHandlers();
 		});
 	}
 
-	private function attachEventHandlers(): void {
+	private function attachEventHandlers(): void
+	{
 		Event::on(
 			View::class,
 			View::EVENT_BEFORE_RENDER_TEMPLATE,
@@ -64,7 +68,7 @@ class GptContentGenerator extends Plugin {
 				$group = $fieldGroups[(string) $event->sender->id] ?? null;
 				if (
 					!isset($group) || $group === '' ||
-					!$user->checkPermission('gpt-cg-view-'. $group) ||
+					!$user->checkPermission('gpt-cg-view-' . $group) ||
 					!isset($plugin->settings->getGroups()[$group])
 				)
 					return;
@@ -75,14 +79,14 @@ class GptContentGenerator extends Plugin {
 					'event' => $event,
 					'group' => $group,
 					'type' => $type
-				] );
+				]);
 			}
 		);
 
 		Event::on(
 			UserPermissions::class,
 			UserPermissions::EVENT_REGISTER_PERMISSIONS,
-			function(RegisterUserPermissionsEvent $event) {
+			function (RegisterUserPermissionsEvent $event) {
 				$permissions = [
 					'gpt-cg-view' => [
 						'label' => 'View and execute prompts'
@@ -90,14 +94,14 @@ class GptContentGenerator extends Plugin {
 				];
 
 				foreach ($this->settings->getGroups() as $group => $groupVal) {
-					$permissions['gpt-cg-view-'. $group] = [
-						'label' => 'View and execute prompts in group '. $groupVal['name']
+					$permissions['gpt-cg-view-' . $group] = [
+						'label' => 'View and execute prompts in group ' . $groupVal['name']
 					];
 				}
 
 				foreach ($this->settings->getGroups() as $group => $groupVal) {
-					$permissions['gpt-cg-edit-'. $group] = [
-						'label' => 'Edit prompts in group '. $groupVal['name']
+					$permissions['gpt-cg-edit-' . $group] = [
+						'label' => 'Edit prompts in group ' . $groupVal['name']
 					];
 				}
 
@@ -125,7 +129,7 @@ class GptContentGenerator extends Plugin {
 		Event::on(
 			UrlManager::class,
 			UrlManager::EVENT_REGISTER_CP_URL_RULES,
-			function(RegisterUrlRulesEvent $event) {
+			function (RegisterUrlRulesEvent $event) {
 				$event->rules['gpt-content-generator/settings'] = 'gpt-content-generator/settings';
 
 				$event->rules['gpt-content-generator/prompts'] = 'gpt-content-generator/prompts';
@@ -138,7 +142,8 @@ class GptContentGenerator extends Plugin {
 	/**
 	 * @inheritdoc
 	 */
-	public static function config(): array {
+	public static function config(): array
+	{
 		return [
 			'components' => [
 				'gptService' => GptService::class,
@@ -154,11 +159,13 @@ class GptContentGenerator extends Plugin {
 		];
 	}
 
-	protected function createSettingsModel(): ?Model {
+	protected function createSettingsModel(): ?Model
+	{
 		return new Settings();
 	}
 
-	public function getCpNavItem(): ?array {
+	public function getCpNavItem(): ?array
+	{
 		$app = Craft::$app;
 
 		if (!$app->user->checkPermission('gpt-cg-view'))
@@ -189,9 +196,10 @@ class GptContentGenerator extends Plugin {
 		return $nav;
 	}
 
-	public function getSettingsResponse(): mixed {
+	public function getSettingsResponse(): mixed
+	{
 		return Craft::$app->controller->redirect(
 			'gpt-content-generator/settings'
-	);
+		);
 	}
 }

@@ -5,8 +5,10 @@ namespace soerenmeier\gptcontentgenerator\migrations;
 use Craft;
 use craft\db\Migration;
 
-class Install extends Migration {
-	public function safeUp(): bool {
+class Install extends Migration
+{
+	public function safeUp(): bool
+	{
 		// Favorites Table
 		$this->createTable('{{%gpt_content_prompts}}', [
 			'id' => $this->primaryKey(),
@@ -24,7 +26,8 @@ class Install extends Migration {
 		return true;
 	}
 
-	public function safeDown(): bool {
+	public function safeDown(): bool
+	{
 		$this->dropTableIfExists('{{%gpt_content_prompts}}');
 
 		return true;
