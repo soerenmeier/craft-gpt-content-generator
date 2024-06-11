@@ -1,4 +1,5 @@
 <?php
+
 namespace soerenmeier\gptcontentgenerator\controllers;
 
 use soerenmeier\gptcontentgenerator\GptContentGenerator;
@@ -6,11 +7,13 @@ use Craft;
 use craft\web\Controller;
 use craft\web\Response;
 
-class SettingsController extends Controller {
+class SettingsController extends Controller
+{
 	protected array|int|bool $allowAnonymous = false;
 	public $enableCsrfValidation = false;
 
-	public function actionIndex(): Response {
+	public function actionIndex(): Response
+	{
 		$craft = Craft::$app;
 		$plugin = GptContentGenerator::$plugin;
 		$settings = $plugin->settings;
@@ -45,7 +48,8 @@ class SettingsController extends Controller {
 		]);
 	}
 
-	public function actionFields(): Response {
+	public function actionFields(): Response
+	{
 		$settings = GptContentGenerator::$plugin->settings;
 
 		return $this->renderTemplate('gpt-content-generator/settings/fields', [
@@ -53,7 +57,8 @@ class SettingsController extends Controller {
 		]);
 	}
 
-	public function actionGetFields() {
+	public function actionGetFields()
+	{
 		$this->requireAdmin();
 
 		$craft = Craft::$app;
@@ -84,7 +89,8 @@ class SettingsController extends Controller {
 		]);
 	}
 
-	public function actionSaveFieldGroups() {
+	public function actionSaveFieldGroups()
+	{
 		$this->requireAdmin();
 
 		$craft = Craft::$app;
@@ -101,14 +107,14 @@ class SettingsController extends Controller {
 	}
 }
 
-function filterField($field, $nesting = false): ?array {
+function filterField($field, $nesting = false): ?array
+{
 	$type = (new \ReflectionClass($field))->name;
 
 	switch ($type) {
 		case 'craft\fields\PlainText':
 		case 'craft\ckeditor\Field':
 		case 'craft\redactor\Field':
-		// case 'craft\fields\Table':
 			return [
 				'id' => (string) $field->id,
 				'type' => $type,
@@ -117,7 +123,6 @@ function filterField($field, $nesting = false): ?array {
 			];
 
 		case 'craft\fields\Matrix':
-		// case 'benf\neo\Field':
 			if (!$nesting)
 				return null;
 
@@ -126,17 +131,15 @@ function filterField($field, $nesting = false): ?array {
 			foreach ($field->blockTypeFields as $blockField) {
 				$nField = filterField($blockField, false);
 				if (!is_null($nField)) {
-					$nField['handle'] = $field->handle. '.'. $nField['handle'];
-					$nField['name'] = $field->name. ': '. $nField['name'];
+					$nField['handle'] = $field->handle . '.' . $nField['handle'];
+					$nField['name'] = $field->name . ': ' . $nField['name'];
 					$nFields[] = $nField;
 				}
 			}
 
 			return $nFields;
-		// nystudio107\seomatic\fields\SeoSettings
 
 		default:
-			// var_dump($type);
 			return null;
 	}
 }

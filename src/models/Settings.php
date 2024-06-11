@@ -1,9 +1,11 @@
 <?php
+
 namespace soerenmeier\gptcontentgenerator\models;
 
 use craft\base\Model;
 
-class Settings extends Model {
+class Settings extends Model
+{
 	public string $apiKey = '';
 
 	public string $gptModel = 'default';
@@ -16,7 +18,8 @@ class Settings extends Model {
 	/// ['id' => 'groupKey']
 	public array $fieldGroups = [];
 
-	public function getGroups() {
+	public function getGroups()
+	{
 		return array_merge([
 			'default' => [
 				'name' => 'Default'
@@ -24,7 +27,8 @@ class Settings extends Model {
 		], $this->groups);
 	}
 
-	public function rules(): array {
+	public function rules(): array
+	{
 		return [
 			[['apiKey'], 'string'],
 			[['gptModel'], 'string'],

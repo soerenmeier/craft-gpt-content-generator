@@ -1,4 +1,5 @@
 <?php
+
 namespace soerenmeier\gptcontentgenerator\controllers;
 
 use Craft;
@@ -7,15 +8,17 @@ use craft\web\Response;
 use soerenmeier\gptcontentgenerator\GptContentGenerator;
 use soerenmeier\gptcontentgenerator\models\Prompts;
 
-class PromptsController extends Controller {
+class PromptsController extends Controller
+{
 	protected array|int|bool $allowAnonymous = false;
 	public $enableCsrfValidation = false;
 
-	public function actionIndex(?int $promptId = null): Response {
+	public function actionIndex(?int $promptId = null): Response
+	{
 		$canEdit = false;
 		$groups = GptContentGenerator::$plugin->settings->getGroups();
 		foreach ($groups as $key => $group) {
-			if (Craft::$app->user->checkPermission('gpt-cg-edit-'. $key))
+			if (Craft::$app->user->checkPermission('gpt-cg-edit-' . $key))
 				$canEdit = true;
 		}
 
@@ -24,14 +27,16 @@ class PromptsController extends Controller {
 		]);
 	}
 
-	public function actionEdit(?int $promptId = null): Response {
+	public function actionEdit(?int $promptId = null): Response
+	{
 		return $this->renderTemplate('gpt-content-generator/prompts/edit', [
 			'promptId' => $promptId
 		]);
 	}
 
 	// actions/gpt-content-generator/prompts/get
-	public function actionGet() {
+	public function actionGet()
+	{
 		$this->requirePermission('gpt-cg-view');
 
 		$plugin = GptContentGenerator::$plugin;
@@ -42,17 +47,17 @@ class PromptsController extends Controller {
 		$nGroups = [];
 		foreach ($groups as $key => $group) {
 			// check the rights
-			if (!$user->checkPermission('gpt-cg-view-'. $key))
+			if (!$user->checkPermission('gpt-cg-view-' . $key))
 				continue;
 			$group['key'] = $key;
-			$group['canEdit'] = $user->checkPermission('gpt-cg-edit-'. $key);
+			$group['canEdit'] = $user->checkPermission('gpt-cg-edit-' . $key);
 			$nGroups[] = $group;
 		}
 
 		$prompts = Prompts::find()->all();
 		$nPrompts = [];
 		foreach ($prompts as $prompt) {
-			if (!$user->checkPermission('gpt-cg-view-'. $prompt->group))
+			if (!$user->checkPermission('gpt-cg-view-' . $prompt->group))
 				continue;
 
 			$nPrompts[] = $prompt;
@@ -66,7 +71,8 @@ class PromptsController extends Controller {
 	}
 
 	// actions/gpt-content-generator/prompts/save
-	public function actionSave() {
+	public function actionSave()
+	{
 		$this->requirePostRequest();
 
 		$craft = Craft::$app;
@@ -78,7 +84,7 @@ class PromptsController extends Controller {
 		$prompt = $request->getBodyParam('prompt');
 		$group = $request->getBodyParam('group');
 
-		$this->requirePermission('gpt-cg-edit-'. $group);
+		$this->requirePermission('gpt-cg-edit-' . $group);
 
 		// make sure the group exists
 		$groups = $plugin->settings->getGroups();
@@ -101,7 +107,8 @@ class PromptsController extends Controller {
 	}
 
 	// actions/gpt-content-generator/prompts/save
-	public function actionDelete() {
+	public function actionDelete()
+	{
 		$this->requirePostRequest();
 
 		$craft = Craft::$app;
@@ -111,7 +118,7 @@ class PromptsController extends Controller {
 
 		$entry = Prompts::findOne(intval($id));
 
-		$this->requirePermission('gpt-cg-edit-'. $entry->group);
+		$this->requirePermission('gpt-cg-edit-' . $entry->group);
 
 		if (!$entry->delete())
 			throw new \Error("failed to delete entry");
@@ -119,7 +126,8 @@ class PromptsController extends Controller {
 		return $this->asJson(null);
 	}
 
-	public function actionExecute() {
+	public function actionExecute()
+	{
 		$this->requirePostRequest();
 		$this->requirePermission('gpt-cg-view');
 

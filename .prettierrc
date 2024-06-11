@@ -1,0 +1,16 @@
+{
+	"tabWidth": 4,
+	"useTabs": true,
+	"singleQuote": true,
+	"arrowParens": "avoid",
+	"stylelintIntegration": true,
+	"overrides": [
+		{
+			"files": "*.graphql",
+			"options": {
+				"useTabs": false,
+				"tabWidth": 2
+			}
+		}
+	]
+}
