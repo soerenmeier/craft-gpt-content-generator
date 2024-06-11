@@ -23,6 +23,10 @@ export class Field {
 				this.input = new CkEditor(fieldGen.parentNode);
 				break;
 
+			case 'spicyweb\\tinymce\\fields\\TinyMCE':
+				this.input = new TinyMCE(fieldGen.parentNode);
+				break;
+
 			default:
 				console.log('unknown type: ' + fieldGen.dataset.type);
 		}
@@ -153,5 +157,30 @@ export class CkEditor extends Input {
 
 	setValue(v) {
 		this.instance.setData(v);
+	}
+}
+
+export class TinyMCE extends Input {
+	constructor(cont) {
+		super('tinymce', cont);
+
+		this.el = cont.querySelector('textarea');
+	}
+
+	name() {
+		return this.el.name;
+	}
+
+	value() {
+		return this.el.value;
+	}
+
+	setValue(v) {
+		if (typeof window.tinymce === 'undefined') {
+			console.log('tinymce is not defined');
+			return;
+		}
+
+		window.tinymce.get(this.el.id).setContent(v);
 	}
 }

@@ -24,12 +24,20 @@ function newFieldGen(group, type) {
 }
 
 function scanStaticFields(form, prompts) {
-	let title = form.querySelector('input[name=title]');
 	const titleGroup = prompts.getFieldGroup('title');
-	if (title && titleGroup && prompts.canViewGroup(titleGroup)) {
+	if (!titleGroup) return;
+	const inputs = form.querySelectorAll(
+		'input[type=text]:not([data-gpt-scanned])'
+	);
+
+	for (const input of inputs) {
+		input.setAttribute('data-gpt-scanned', '');
+
+		if (input.name !== 'title' && !input.name.endsWith('[title]')) continue;
+
 		const el = newFieldGen(titleGroup, 'craft\\fields\\PlainText');
-		title.parentNode.appendChild(el);
-		title = new Field(el);
+		input.parentNode.appendChild(el);
+		const title = new Field(el);
 
 		renderIcon(title);
 	}
@@ -80,6 +88,7 @@ export function init(prompts) {
 	document.addEventListener('click', e => {
 		// rescan inputs for example if i click to add a matrix field
 		setTimeout(() => {
+			scanStaticFields(document.body, prompts);
 			scanFields(document.body);
 		}, 500);
 	});
