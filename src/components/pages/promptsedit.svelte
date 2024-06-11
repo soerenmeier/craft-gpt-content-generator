@@ -27,8 +27,7 @@
 		});
 
 		document.body.addEventListener('keydown', e => {
-			if (e.key.toLowerCase() !== 's' || !e.metaKey)
-				return;
+			if (e.key.toLowerCase() !== 's' || !e.metaKey) return;
 
 			e.preventDefault();
 
@@ -51,7 +50,7 @@
 			name="name"
 			bind:value={prompt.name}
 			required
-		>
+		/>
 	</div>
 </div>
 
@@ -84,8 +83,10 @@
 				{#each prompts.groups.filter(g => g.canEdit) as group}
 					<option
 						value={group.key}
-						selected={prompt.group ? null : (group.key === 'default')}
-					>{group.name}</option>
+						selected={prompt.group ? null : group.key === 'default'}
+					>
+						{group.name}
+					</option>
 				{/each}
 			</select>
 		</div>

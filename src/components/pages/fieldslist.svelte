@@ -32,8 +32,7 @@
 		});
 
 		document.body.addEventListener('keydown', e => {
-			if (e.key.toLowerCase() !== 's' || !e.metaKey)
-				return;
+			if (e.key.toLowerCase() !== 's' || !e.metaKey) return;
 
 			e.preventDefault();
 
@@ -42,8 +41,7 @@
 
 		enableAll.addEventListener('click', e => {
 			combined = combined.map(c => {
-				if (!c.group)
-					c.group = 'default';
+				if (!c.group) c.group = 'default';
 				return c;
 			});
 		});
@@ -75,10 +73,16 @@
 					<td>{field.type}</td>
 					<td>
 						<div class="select">
-							<select id="group" name="group" bind:value={field.group}>
+							<select
+								id="group"
+								name="group"
+								bind:value={field.group}
+							>
 								<option value=""></option>
 								{#each prompts.groups as group}
-									<option value={group.key}>{group.name}</option>
+									<option value={group.key}>
+										{group.name}
+									</option>
 								{/each}
 							</select>
 						</div>

@@ -1,7 +1,7 @@
 import PopOverMan from './popoverman.js';
 import { Field } from './field.js';
 
-const popOverMan = new PopOverMan;
+const popOverMan = new PopOverMan();
 
 function renderIcon(field) {
 	const icon = document.createElement('span');
@@ -43,25 +43,20 @@ function scanFields(form) {
 		fieldGen.removeAttribute('data-not-scanned');
 
 		const field = new Field(fieldGen);
-		if (!field.input)
-			continue;
+		if (!field.input) continue;
 
 		renderIcon(field);
 	}
 }
 
 function whichEditPath() {
-	if (!window.Craft)
-		return null;
+	if (!window.Craft) return null;
 
 	const p = Craft.path;
 
-	if (p.startsWith('globals/'))
-		return 'globals';
-	if (p.startsWith('entries/') && p.split('/').length > 2)
-		return 'entries';
-	if (p.startsWith('edit/'))
-		return 'entries';
+	if (p.startsWith('globals/')) return 'globals';
+	if (p.startsWith('entries/') && p.split('/').length > 2) return 'entries';
+	if (p.startsWith('edit/')) return 'entries';
 
 	return null;
 
@@ -71,12 +66,9 @@ function whichEditPath() {
 
 export function init(prompts) {
 	const page = whichEditPath();
-	if (!page)
-		return console.log('not edit page');
+	if (!page) return console.log('not edit page');
 
 	popOverMan.setPrompts(prompts);
-
-
 
 	const form = document.getElementById('main-form');
 

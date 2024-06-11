@@ -7,11 +7,9 @@ import PromptsEdit from './components/pages/promptsedit.svelte';
 import FieldsList from './components/pages/fieldslist.svelte';
 import { init as initFields } from './lib/fieldsaction.js';
 
-
 function initPromptsList(prompts) {
 	const promptsList = document.getElementById('prompts-list-table');
-	if (!promptsList)
-		return;
+	if (!promptsList) return;
 
 	const url = new URL(promptsList.dataset.url);
 
@@ -19,15 +17,14 @@ function initPromptsList(prompts) {
 		target: promptsList,
 		props: {
 			prompts,
-			url: url.origin + url.pathname
-		}
+			url: url.origin + url.pathname,
+		},
 	});
 }
 
 function initPromptsEdit(prompts) {
 	const promptsEdit = document.getElementById('prompts-edit');
-	if (!promptsEdit)
-		return;
+	if (!promptsEdit) return;
 
 	const form = document.getElementById('main-form');
 	form.removeAttribute('novalidate');
@@ -39,15 +36,14 @@ function initPromptsEdit(prompts) {
 			prompts,
 			form,
 			id: promptsEdit.dataset.id,
-			url: url.origin + url.pathname
-		}
+			url: url.origin + url.pathname,
+		},
 	});
 }
 
 async function initFieldsList(prompts) {
 	const fieldsList = document.getElementById('gpt-fields-list');
-	if (!fieldsList)
-		return;
+	if (!fieldsList) return;
 
 	// load fields
 	const fields = await Fields.load();
@@ -65,8 +61,8 @@ async function initFieldsList(prompts) {
 			fields,
 			form,
 			enableAll,
-			disableAll
-		}
+			disableAll,
+		},
 	});
 }
 
