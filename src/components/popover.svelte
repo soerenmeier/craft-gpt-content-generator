@@ -5,11 +5,11 @@
 	import GeneratedText from './generatedtext.svelte';
 	import { isPromptsError } from '../lib/prompts.js';
 
+	const dispatch = createEventDispatcher();
+
 	// input or textarea
 	export let field;
 	export let prompts;
-
-	const dispatch = createEventDispatcher();
 
 	let contEl;
 	let mounted = null;
@@ -49,8 +49,12 @@
 		const dif = Date.now() - mounted;
 		if (dif < 100) return;
 
+		// if the click was inside
 		if (contEl.contains(e.target) || !document.body.contains(e.target))
 			return;
+
+		// only close if no prompt is being generated
+		if (generatePrompt) return;
 
 		// else let's close the prompt
 		dispatch('close');
