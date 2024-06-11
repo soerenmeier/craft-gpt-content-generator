@@ -1,6 +1,5 @@
 {
   "name": "gpt-content-generator",
-  "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "src/main.js",
