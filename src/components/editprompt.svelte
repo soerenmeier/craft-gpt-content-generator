@@ -43,7 +43,7 @@
 					name="name"
 					bind:value={prompt.name}
 					required
-				>
+				/>
 			</div>
 		</div>
 
@@ -77,9 +77,11 @@
 				</div>
 			</div>
 		{/if} -->
-		
+
 		<button class="btn submit">Save</button>
-		<button type="button" class="btn" on:click={e => dispatch('cancel')}>Cancel</button>
+		<button type="button" class="btn" on:click={e => dispatch('cancel')}>
+			Cancel
+		</button>
 	</form>
 </div>
 
@@ -88,4 +90,3 @@
 		margin-bottom: 20px;
 	}
 </style>
-

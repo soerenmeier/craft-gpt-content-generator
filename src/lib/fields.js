@@ -18,14 +18,17 @@ export default class Fields {
 			const { id, handle, type, name } = f;
 
 			return {
-				id, handle, type, name,
-				group: this.fieldGroups[id] ?? ''
-			}
+				id,
+				handle,
+				type,
+				name,
+				group: this.fieldGroups[id] ?? '',
+			};
 		});
 	}
 
 	async saveFieldGroups(fieldGroups) {
-		const data = new FormData;
+		const data = new FormData();
 		data.set('fieldGroups', JSON.stringify(fieldGroups));
 
 		const resp = await fetch(
@@ -34,12 +37,11 @@ export default class Fields {
 				method: 'POST',
 				body: data,
 				headers: {
-					Accept: 'application/json'
-				}
+					Accept: 'application/json',
+				},
 			}
 		);
-		if (!resp.ok)
-			throw new Error('not ok');
+		if (!resp.ok) throw new Error('not ok');
 
 		this.fieldGroups = await resp.json();
 	}

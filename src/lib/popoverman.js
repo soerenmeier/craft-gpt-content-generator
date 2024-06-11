@@ -30,8 +30,8 @@ export default class PopOverMan {
 			target: document.body,
 			props: {
 				field,
-				prompts: this.prompts
-			}
+				prompts: this.prompts,
+			},
 		});
 		el.$on('close', e => {
 			el.$destroy();

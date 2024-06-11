@@ -3,8 +3,7 @@
 	export let url;
 
 	async function onDelete(e, prompt) {
-		if (!confirm('Delete the Prompt?'))
-			return;
+		if (!confirm('Delete the Prompt?')) return;
 
 		try {
 			await prompts.del(prompt);
@@ -35,20 +34,31 @@
 						<tr>
 							<td>
 								{#if prompts.canEditGroup(prompt.group)}
-									<a href={url + '/prompts/' + prompt.id}>{prompt.name}</a>
+									<a href={url + '/prompts/' + prompt.id}>
+										{prompt.name}
+									</a>
 								{:else}
 									{prompt.name}
 								{/if}
 							</td>
 							<td>
-								<span class="light">{prompts.getGroup(prompt.group)?.name ?? ''}</span>
+								<span class="light">
+									{prompts.getGroup(prompt.group)?.name ?? ''}
+								</span>
 							</td>
 							<td>
 								<span class="light">{prompt.prompt}</span>
 							</td>
 							<td>
 								{#if prompts.canEditGroup(prompt.group)}
-									<a title="Delete" role="button" href="#" class="delete icon" on:click|preventDefault={e => onDelete(e, prompt)}></a>
+									<a
+										title="Delete"
+										role="button"
+										href="#"
+										class="delete icon"
+										on:click|preventDefault={e =>
+											onDelete(e, prompt)}
+									></a>
 								{/if}
 							</td>
 						</tr>

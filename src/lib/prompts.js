@@ -7,8 +7,11 @@ export class PromptsError extends Error {
 }
 
 export function isPromptsError(e) {
-	return typeof e === 'object' && e !== null &&
-		typeof e.__promptsError__ === 'function';
+	return (
+		typeof e === 'object' &&
+		e !== null &&
+		typeof e.__promptsError__ === 'function'
+	);
 }
 
 export default class Prompts {
@@ -20,9 +23,7 @@ export default class Prompts {
 	}
 
 	static async load() {
-		const resp = await fetch(
-			'/actions/gpt-content-generator/prompts/get'
-		);
+		const resp = await fetch('/actions/gpt-content-generator/prompts/get');
 		return new Prompts(await resp.json());
 	}
 
@@ -57,9 +58,8 @@ export default class Prompts {
 	}
 
 	async save(prompt) {
-		const data = new FormData;
-		if (prompt.id)
-			data.set('id', prompt.id);
+		const data = new FormData();
+		if (prompt.id) data.set('id', prompt.id);
 		data.set('name', prompt.name);
 		data.set('prompt', prompt.prompt);
 		data.set('group', prompt.group);
@@ -70,33 +70,30 @@ export default class Prompts {
 				method: 'POST',
 				body: data,
 				headers: {
-					Accept: 'application/json'
-				}
+					Accept: 'application/json',
+				},
 			}
 		);
-		if (!resp.ok)
-			throw new Error('not ok');
+		if (!resp.ok) throw new Error('not ok');
 		prompt = await resp.json();
 
 		// update data
 
 		const updated = this.list.find(p => {
-			if (p.id != prompt.id)
-				return false;
+			if (p.id != prompt.id) return false;
 
 			p.name = prompt.name;
 			p.prompt = prompt.prompt;
 			p.group = prompt.group;
 			return true;
 		});
-		if (!updated)
-			this.list.push(prompt);
+		if (!updated) this.list.push(prompt);
 
 		return prompt;
 	}
 
 	async del(prompt) {
-		const data = new FormData;
+		const data = new FormData();
 		data.set('id', prompt.id);
 
 		const resp = await fetch(
@@ -105,12 +102,11 @@ export default class Prompts {
 				method: 'POST',
 				body: data,
 				headers: {
-					Accept: 'application/json'
-				}
+					Accept: 'application/json',
+				},
 			}
 		);
-		if (!resp.ok)
-			throw new Error('not ok');
+		if (!resp.ok) throw new Error('not ok');
 
 		// update data
 
@@ -119,27 +115,25 @@ export default class Prompts {
 
 	// finalPrompt: str
 	async execute(finalPrompt, ctx) {
-		const data = new FormData;
+		const data = new FormData();
 		data.set('prompt', finalPrompt);
 		data.set('context', JSON.stringify(ctx));
-		
+
 		const resp = await fetch(
 			'/actions/gpt-content-generator/prompts/execute',
 			{
 				method: 'POST',
 				body: data,
 				headers: {
-					Accept: 'application/json'
-				}
+					Accept: 'application/json',
+				},
 			}
 		);
-		if (!resp.ok)
-			throw new Error('not ok');
+		if (!resp.ok) throw new Error('not ok');
 
 		const json = await resp.json();
 
-		if (json?.error)
-			throw new PromptsError(json.error);
+		if (json?.error) throw new PromptsError(json.error);
 
 		return json;
 	}

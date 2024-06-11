@@ -33,14 +33,12 @@ export class Field {
 	}
 
 	label() {
-		if (this.labelEl)
-			return this.labelEl.innerText;
+		if (this.labelEl) return this.labelEl.innerText;
 		return '';
 	}
 
 	instructions() {
-		if (this.instructionsEl)
-			return this.instructionsEl.innerText;
+		if (this.instructionsEl) return this.instructionsEl.innerText;
 		return '';
 	}
 
@@ -140,8 +138,9 @@ export class CkEditor extends Input {
 		super('ckeditor', cont);
 
 		this.el = cont.querySelector('textarea');
-		this.instance = this.cont.querySelector('.ck-editor__editable')
-			.ckeditorInstance;
+		this.instance = this.cont.querySelector(
+			'.ck-editor__editable'
+		).ckeditorInstance;
 	}
 
 	name() {

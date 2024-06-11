@@ -20,7 +20,9 @@
 				<button
 					type="button"
 					on:click={e => dispatch('select', { prompt })}
-				>{prompt.name}</button>
+				>
+					{prompt.name}
+				</button>
 				{#if prompts.canEditGroup(group)}
 					<button
 						type="button"
@@ -40,7 +42,9 @@
 	</div>
 
 	{#if prompts.canEditGroup(group)}
-		<button type="button" class="btn" on:click={onNewPrompt}>+ New Prompt</button>
+		<button type="button" class="btn" on:click={onNewPrompt}>
+			+ New Prompt
+		</button>
 	{/if}
 </div>
 

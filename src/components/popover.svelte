@@ -29,11 +29,12 @@
 			contEl.style.bottom = 'auto';
 		} else {
 			contEl.style.top = 'auto';
-			contEl.style.bottom = (window.innerHeight - rect.top) + 'px';
+			contEl.style.bottom = window.innerHeight - rect.top + 'px';
 		}
 
-		contEl.style.right = (window.innerWidth - rect.right) + 'px';
-		contEl.style.maxWidth = Math.min(800, field.input.cont.offsetWidth) + 'px';
+		contEl.style.right = window.innerWidth - rect.right + 'px';
+		contEl.style.maxWidth =
+			Math.min(800, field.input.cont.offsetWidth) + 'px';
 	}
 
 	function onScroll() {
@@ -46,8 +47,7 @@
 
 	function onWindowClick(e) {
 		const dif = Date.now() - mounted;
-		if (dif < 100)
-			return;
+		if (dif < 100) return;
 
 		if (contEl.contains(e.target) || !document.body.contains(e.target))
 			return;
@@ -60,7 +60,7 @@
 		editPrompt = {
 			name: '',
 			prompt: '',
-			group: field.group
+			group: field.group,
 		};
 		await tick();
 		updatePosition();
@@ -116,29 +116,26 @@
 					name: field.name(),
 					label: field.label(),
 					instructions: field.instructions(),
-					value: field.value()
-				}
+					value: field.value(),
+				},
 			};
 
-			if (window?.Craft?.siteId)
-				ctx.siteId = Craft.siteId;
+			if (window?.Craft?.siteId) ctx.siteId = Craft.siteId;
 
 			generatePrompt = {
 				prompt,
-				ctx
+				ctx,
 			};
 		}
 
 		try {
 			generatedText = await prompts.execute(
 				generatePrompt.prompt,
-				generatePrompt.ctx
+				generatePrompt.ctx,
 			);
 		} catch (e) {
-			if (isPromptsError(e))
-				generateError = e.message;
-			else
-				generateError = 'could not generate';
+			if (isPromptsError(e)) generateError = e.message;
+			else generateError = 'could not generate';
 		}
 	}
 
@@ -177,7 +174,7 @@
 				{prompts}
 				prompt={editPrompt}
 				on:save={onPromptSave}
-				on:cancel={e => editPrompt = null}
+				on:cancel={e => (editPrompt = null)}
 			/>
 		{:else}
 			<PromptSelector
@@ -207,7 +204,9 @@
 		// background-color: var(--gray-050);
 		background-color: white;
 		border-radius: var(--large-border-radius);
-		box-shadow: 0 0 0 1px #cdd8e4, 0 2px 12px rgba(205,216,228,.5);
+		box-shadow:
+			0 0 0 1px #cdd8e4,
+			0 2px 12px rgba(205, 216, 228, 0.5);
 
 		:global {
 			h5 {

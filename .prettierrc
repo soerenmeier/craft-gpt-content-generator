@@ -4,6 +4,7 @@
 	"singleQuote": true,
 	"arrowParens": "avoid",
 	"stylelintIntegration": true,
+	"htmlWhitespaceSensitivity": "ignore",
 	"overrides": [
 		{
 			"files": "*.graphql",
