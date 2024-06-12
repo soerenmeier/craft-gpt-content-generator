@@ -23,10 +23,10 @@ function newFieldGen(group, type) {
 	return el;
 }
 
-function scanStaticFields(form, prompts) {
+function scanStaticFields(prompts) {
 	const titleGroup = prompts.getFieldGroup('title');
 	if (!titleGroup) return;
-	const inputs = form.querySelectorAll(
+	const inputs = document.querySelectorAll(
 		'input[type=text]:not([data-gpt-scanned])'
 	);
 
@@ -43,8 +43,8 @@ function scanStaticFields(form, prompts) {
 	}
 }
 
-function scanFields(form) {
-	const fields = form.querySelectorAll(
+function scanFields() {
+	const fields = document.querySelectorAll(
 		'.gpt-content-generator-field[data-not-scanned]'
 	);
 	for (const fieldGen of fields) {
@@ -57,39 +57,17 @@ function scanFields(form) {
 	}
 }
 
-function whichEditPath() {
-	if (!window.Craft) return null;
-
-	const p = Craft.path;
-
-	if (p.startsWith('globals/')) return 'globals';
-	if (p.startsWith('entries/') && p.split('/').length > 2) return 'entries';
-	if (p.startsWith('edit/')) return 'entries';
-
-	return null;
-
-	// if (document.body.classList.contains('edit-global-set'))
-	// 	return true;
-}
-
 export function init(prompts) {
-	const page = whichEditPath();
-	if (!page) return console.log('not edit page');
-
 	popOverMan.setPrompts(prompts);
 
-	const form = document.getElementById('main-form');
-
-	// Craft.siteId Craft.sites
-
-	scanStaticFields(form, prompts);
-	scanFields(document.body);
+	scanStaticFields(prompts);
+	scanFields();
 
 	document.addEventListener('click', e => {
 		// rescan inputs for example if i click to add a matrix field
 		setTimeout(() => {
-			scanStaticFields(document.body, prompts);
-			scanFields(document.body);
+			scanStaticFields(prompts);
+			scanFields();
 		}, 500);
 	});
 }
