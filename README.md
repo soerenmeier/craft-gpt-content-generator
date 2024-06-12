@@ -14,19 +14,20 @@ GPT Content Generator is a dynamic plugin designed for Craft CMS 4. It integrate
 
 The plugin currently supports the following fields:
 
-- [x] Title
-- [x] Plaintext
-- [x] Redactor
-- [x] CkEditor
-- [ ] Seomatic Settings
+-   [x] Title
+-   [x] Plaintext
+-   [x] Redactor
+-   [x] CkEditor
+-   [x] TinyMCE
 
 ## Installation
 
 Via the [Craft Plugin Store](https://plugins.craftcms.com/gpt-content-generator?craft4) or the command-line:
+
 ```
 composer require soerenmeier/gpt-content-generator -w && php craft plugin/install gpt-content-generator
 ```
 
 ## Contribute and Support
 
-We are constantly looking to expand and improve GPT Content Generator. If you have a request for a new field to be supported or any other suggestions, please feel free to open an issue on our GitHub repository.
+I am constantly looking to expand and improve GPT Content Generator. If you have a request for a new field to be supported or any other suggestions, please feel free to open an issue on my GitHub repository.

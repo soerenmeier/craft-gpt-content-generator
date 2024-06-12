@@ -111,10 +111,12 @@ function filterField($field, $nesting = false): ?array
 {
 	$type = (new \ReflectionClass($field))->name;
 
+	// also add the field to the js file
 	switch ($type) {
 		case 'craft\fields\PlainText':
 		case 'craft\ckeditor\Field':
 		case 'craft\redactor\Field':
+		case 'spicyweb\tinymce\fields\TinyMCE':
 			return [
 				'id' => (string) $field->id,
 				'type' => $type,
