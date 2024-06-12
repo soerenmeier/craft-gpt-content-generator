@@ -5,8 +5,9 @@ export default class PopOverMan {
 	constructor() {
 		this.prompts = null;
 
-		this.current = null;
-		this.currentField = null;
+		// { id, comp, field }
+		this.actives = [];
+		this.id = 0;
 	}
 
 	setPrompts(prompts) {
@@ -14,17 +15,21 @@ export default class PopOverMan {
 	}
 
 	open(field) {
-		if (this.current) {
-			this.current.$destroy();
-			this.current = null;
-		}
+		// close the popup if it is already open
+		let closedSomething = false;
+		this.actives = this.actives.filter(active => {
+			if (active.field.eq(field)) {
+				active.comp.$destroy();
+				closedSomething = true;
+				return false;
+			}
 
-		if (this.currentField && this.currentField.eq(field)) {
-			this.currentField = null;
-			return;
-		}
+			return true;
+		});
 
-		this.currentField = field;
+		if (closedSomething) return;
+
+		const id = this.id++;
 
 		const el = new PopOver({
 			target: document.body,
@@ -35,11 +40,10 @@ export default class PopOverMan {
 		});
 		el.$on('close', e => {
 			el.$destroy();
-			if (this.currentField && this.currentField.eq(field)) {
-				this.currentField = null;
-				this.current = null;
-			}
+
+			this.actives = this.actives.filter(active => active.id !== id);
 		});
-		this.current = el;
+
+		this.actives.push({ id, comp: el, field });
 	}
 }
