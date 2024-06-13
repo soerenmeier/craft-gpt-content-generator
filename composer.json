@@ -3,6 +3,7 @@
 	"description": "Enhance your craft cms experience with GPT.",
 	"type": "craft-plugin",
 	"license": "proprietary",
+	"version": "1.2.0",
 	"support": {
 		"source": "https://github.com/soerenmeier/craft-gpt-content-generator"
 	},
