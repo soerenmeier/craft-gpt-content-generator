@@ -19,10 +19,21 @@
 		{# <p><strong>Example</strong></p> #}
 		<h2>Examples</h2>
 
+		<p><strong>Execute</strong> (any prompt you input into the field):<br>
+		<code><i>{{"{{field.value|raw}}"}}</i></code></p>
+
 		<p><strong>Translate:</strong><br>
-		Translate the following content into the language <i>{{"{{currentSite.language}}"}}</i> keeping all html tags:<br><i>{{"{{field.value|raw}}"}}</i></p>
+		<code>Translate the following content into the language <i>{{"{{currentSite.language}}"}}</i> keeping all html tags:<br><i>{{"{{field.value|raw}}"}}</i></code></p>
 
 		<p><strong>Spelling:</strong><br>
-		Fix all spelling mistakes in the following text:<br><i>{{"{{field.value|raw}}"}}</i></p>
+		<code>Fix all spelling mistakes in the following text:<br><i>{{"{{field.value|raw}}"}}</i></code></p>
 	</div>
 {% endblock %}
+
+ {% css %}
+ .prompt-examples code {
+	display: inline-block;
+	padding: 0.1rem;
+	background-color: #eee;
+ }
+ {% endcss %}
