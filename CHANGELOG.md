@@ -1,5 +1,10 @@
 # Release Notes for GPT Content Generator
 
+## 2.2.0 - 2024-10-24
+
+### Features
+-   ai button is now available everywhere a field can be added (#5)
+
 ## 2.1.0 - 2024-06-12
 
 ### Features
