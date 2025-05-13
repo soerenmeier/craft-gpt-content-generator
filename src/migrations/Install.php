@@ -13,7 +13,8 @@ class Install extends Migration
 			'id' => $this->primaryKey(),
 			'name' => $this->string()->notNull(),
 			'prompt' => $this->text()->notNull(),
-			'group' => $this->string()->notNull()
+			'group' => $this->string()->notNull(),
+			'sortOrder' => $this->integer()->notNull()->defaultValue(0)
 		]);
 
 		$this->createIndex(

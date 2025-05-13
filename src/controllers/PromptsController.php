@@ -7,6 +7,8 @@ use craft\web\Controller;
 use craft\web\Response;
 use soerenmeier\gptcontentgenerator\GptContentGenerator;
 use soerenmeier\gptcontentgenerator\models\Prompts;
+use yii\web\ForbiddenHttpException;
+use yii\web\BadRequestHttpException;
 
 class PromptsController extends Controller
 {
@@ -139,6 +141,57 @@ class PromptsController extends Controller
 			throw new \Error("failed to delete entry");
 
 		return $this->asJson(null);
+	}
+
+	public function actionReorder()
+	{
+		$this->requirePostRequest();
+
+		// Check if user can edit prompts in any group
+		$canEditAnyGroup = false;
+		$groups = GptContentGenerator::$plugin->settings->getGroups();
+		foreach ($groups as $key => $groupSettings) {
+			if (Craft::$app->user->checkPermission('gpt-cg-edit-' . $key)) {
+				$canEditAnyGroup = true;
+				break;
+			}
+		}
+
+		if (!$canEditAnyGroup) {
+			throw new ForbiddenHttpException('User not permitted to reorder prompts.');
+		}
+
+		$request = Craft::$app->getRequest();
+		$rawOrderedIds = $request->getRequiredBodyParam('ids');
+		$orderedIds = json_decode($rawOrderedIds, true);
+
+		if (!is_array($orderedIds)) {
+			Craft::error('Invalid format for ordered IDs. Expected a JSON array. Payload: ' . $rawOrderedIds, __METHOD__);
+			throw new BadRequestHttpException('Invalid format for ordered IDs. Expected a JSON array.');
+		}
+
+		$db = Craft::$app->getDb();
+		$transaction = $db->beginTransaction();
+
+		try {
+			foreach ($orderedIds as $sortOrder => $id) {
+				$prompt = Prompts::findOne(intval($id));
+				if (!$prompt)
+					throw new \Exception("Prompt with ID $id not found during reorder operation.");
+
+				$prompt->sortOrder = $sortOrder + 1;
+				if (!$prompt->save(false))
+					throw new \Exception("Failed to update sort order for prompt ID {$id}: ");
+			}
+
+			$transaction->commit();
+
+			return $this->asSuccess(Craft::t('gpt-content-generator', 'Prompts reordered.'));
+		} catch (\Throwable $e) {
+			$transaction->rollBack();
+			Craft::error('Error reordering prompts: ' . $e->getMessage(), __METHOD__);
+			return $this->asErrorJson($e->getMessage());
+		}
 	}
 
 	public function actionExecute()
