@@ -1,9 +1,17 @@
 # Release Notes for GPT Content Generator
 
+## 2.3.0 - 2025-05-13
+
+### Features
+- allow prompts to be reorded in the prompts page (#8)
+
+### Fixes
+- running a translate prompt in a site which is disabled failed (#7)
+
 ## 2.2.0 - 2024-10-24
 
 ### Features
--   ai button is now available everywhere a field can be added (#5)
+- ai button is now available everywhere a field can be added (#5)
 
 ## 2.1.0 - 2024-06-12
 
