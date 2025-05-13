@@ -216,7 +216,7 @@ class PromptsController extends Controller
 			];
 
 			if (isset($context['siteId']))
-				$variables['currentSite'] = $craft->sites->getSiteById($context['siteId']);
+				$variables['currentSite'] = $craft->sites->getSiteById($context['siteId'], true);
 
 			// todo add siteId to context
 
