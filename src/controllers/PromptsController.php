@@ -15,6 +15,8 @@ class PromptsController extends Controller
 
 	public function actionIndex(?int $promptId = null): Response
 	{
+		$user = Craft::$app->user;
+
 		$canEdit = false;
 		$groups = GptContentGenerator::$plugin->settings->getGroups();
 		foreach ($groups as $key => $group) {
@@ -22,8 +24,21 @@ class PromptsController extends Controller
 				$canEdit = true;
 		}
 
+		$prompts = Prompts::find()->all();
+		$nPrompts = [];
+		foreach ($prompts as $prompt) {
+			if (!$user->checkPermission('gpt-cg-view-' . $prompt->group))
+				continue;
+
+			$prompt = (object) $prompt->toArray();
+			$prompt->canEdit = $user->checkPermission('gpt-cg-edit-' . $prompt->group);
+			$prompt->group = $groups[$prompt->group]["name"] ?? $prompt->group;
+			$nPrompts[] = $prompt;
+		}
+
 		return $this->renderTemplate('gpt-content-generator/prompts/index', [
-			'canEdit' => $canEdit
+			'canEdit' => $canEdit,
+			'prompts' => $nPrompts,
 		]);
 	}
 

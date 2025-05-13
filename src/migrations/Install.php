@@ -9,7 +9,6 @@ class Install extends Migration
 {
 	public function safeUp(): bool
 	{
-		// Favorites Table
 		$this->createTable('{{%gpt_content_prompts}}', [
 			'id' => $this->primaryKey(),
 			'name' => $this->string()->notNull(),

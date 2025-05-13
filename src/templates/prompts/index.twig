@@ -1,15 +1,70 @@
 {% requirePermission 'gpt-cg-view' %}
 
 {% extends '_layouts/cp.twig' %}
-{% set plHandle = 'gpt-content-generator' %}
+{% set plHandle = "gpt-content-generator" %}
 {% set title = 'Prompts'|t(plHandle) %}
 
 {% block actionButton %}
-	{% if canEdit %}
-		<a class="btn submit add icon" href="{{url('gpt-content-generator/prompts/new')}}">{{ "New prompt"|t('app') }}</a>
-	{% endif %}
+  {% if canEdit %}
+    <a class="btn submit add icon"
+       href="{{ url("gpt-content-generator/prompts/new") }}">{{ "New prompt"|t("app") }}</a>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
-	<div id="prompts-list-table" data-url="{{url('gpt-content-generator')}}"></div>
+  {% if prompts|length %}
+    <div class="tablepane">
+      <table id="prompts" class="data fullwidth">
+        <thead>
+          <th scope="col">{{ "Name"|t("app") }}</th>
+          <th scope="col">{{ "Group"|t("app") }}</th>
+          <th scope="col">{{ "Prompt"|t("app") }}</th>
+          {% if canEdit %}
+            <td class="thin"></td>
+            <td class="thin"></td>
+          {% endif %}
+        </thead>
+        <tbody>
+          {% for prompt in prompts %}
+            <tr data-id="{{ prompt.id }}" data-name="Prompts">
+              <th scope="row" data-title="{{ 'Name'|t("app") }}">
+                <a href="{{ url('gpt-content-generator/prompts/' ~ prompt.id) }}">{{ prompt.name }}</a>
+              </th>
+              <td data-title="{{ 'Group'|t("app") }}">
+                <code>{{ prompt.group }}</code>
+              </td>
+              {% if canEdit %}
+                <td class="thin">
+                  <a class="move icon"
+                     title="{{ 'Reorder'|t("app") }}"
+                     aria-label="{{ 'Reorder'|t("app") }}"
+                     role="button"></a>
+                </td>
+                <td class="thin">
+                  <a class="delete icon{% if not prompt.canEdit %} disabled{% endif %}"
+                     title="{{ 'Delete'|t("app") }}"
+                     aria-label="{{ 'Delete'|t("app") }}"
+                     role="button"></a>
+                </td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="zilch">
+      <p>{{ 'No prompts exist yet.'|t("app") }}</p>
+    </div>
+  {% endif %}
 {% endblock %}
+
+{# djlint:off #}
+{% js on ready %}
+    new Craft.AdminTable({
+        tableSelector: '#prompts',
+        sortable: true,
+        reorderAction: 'gpt-content-generator/prompts/reorder',
+        deleteAction: 'gpt-content-generator/prompts/delete',
+    });
+{% endjs %}
