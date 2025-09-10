@@ -7,7 +7,7 @@
 </script>
 
 <div class="generated-text">
-	<p>{text}</p>
+	<div class="generated-text-content">{text}</div>
 
 	<button type="button" class="btn submit" on:click={e => dispatch('accept')}>
 		Ok
@@ -19,3 +19,10 @@
 		Cancel
 	</button>
 </div>
+
+<style lang="scss">
+	.generated-text-content {
+		max-height: 40vh;
+		overflow-y: auto;
+	}
+</style>
