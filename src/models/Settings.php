@@ -10,7 +10,8 @@ class Settings extends Model
 
 	public string $gptModel = 'default';
 
-	public int $maxTokens = 256;
+	// default is 0 = unlimited
+	public int $maxTokens = 0;
 
 	/// {'groupKey': {name: 'MyGroup'}}
 	public array $groups = [];

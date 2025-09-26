@@ -61,15 +61,18 @@ class GptService extends Component
 			'explanations, or formatting. If the text contains HTML ' .
 			'tags, preserve them exactly as provided.';
 
+
+		$maxTokens = $plugin->settings->maxTokens ?: 1024;
+
 		if (str_starts_with($model, 'gpt-5')) {
-			// $body['reasoning'] = ['effort' => 'low'];
-			return $this->responses($model, $system, $prompt);
+			return $this->responses($model, $system, $prompt, $maxTokens);
 		}
 
-		return $this->completions($model, $system, $prompt);
+
+		return $this->completions($model, $system, $prompt, $maxTokens);
 	}
 
-	private function completions(string $model, string $system, string $prompt)
+	private function completions(string $model, string $system, string $prompt, int $maxTokens)
 	{
 		$plugin = GptContentGenerator::$plugin;
 		$apiKey = App::parseEnv($plugin->settings->apiKey);
@@ -96,7 +99,7 @@ class GptService extends Component
 						'model' => $model,
 						'messages' => $messages,
 						// 'temperature' => 1,
-						'max_tokens' => $plugin->settings->maxTokens,
+						'max_tokens' => $maxTokens,
 						// 'top_p' => 1,
 						// 'frequency_penalty' => 0,
 						// 'presence_penalty' => 0
@@ -109,7 +112,7 @@ class GptService extends Component
 
 			Craft::info('gpt response: ' . $body);
 
-			return $content['choices'][0]['message']['content'] ?? null;
+			return $content['choices'][0]['message']['content'] ?? '';
 		} catch (GuzzleException $e) {
 			Craft::error(
 				'Failed to generate content with GPT: ' . $e->getMessage(),
@@ -119,7 +122,7 @@ class GptService extends Component
 		}
 	}
 
-	private function responses(string $model, string $system, string $prompt)
+	private function responses(string $model, string $system, string $prompt, int $maxTokens)
 	{
 		$plugin = GptContentGenerator::$plugin;
 		$apiKey = App::parseEnv($plugin->settings->apiKey);
@@ -143,9 +146,8 @@ class GptService extends Component
 						'model' => $model,
 						'instructions' => $system,
 						'input' => $input,
-						'max_output_tokens' => $plugin->settings->maxTokens,
+						'max_output_tokens' => $maxTokens,
 						'reasoning' => ['effort' => 'low'],
-						'response_format' => ['type' => 'text'],
 					],
 				],
 			);
@@ -155,10 +157,33 @@ class GptService extends Component
 
 			Craft::info('gpt response: ' . $body);
 
-			// Get the last message from the output array
+			$status = $content['status'] ?? '';
+			if ($status === 'incomplete') {
+				$reason = $content['incomplete_details']['reason'] ?? 'unknown';
+				$reasonMessages = [
+					'max_output_tokens' => 'Response was truncated due to maximum token limit. ' .
+						'Try reducing the content length or increasing max tokens.',
+					'content_filter' => 'Response was blocked by content filter.',
+					'recitation' => 'Response was incomplete due to recitation detection.',
+				];
+
+				$message = $reasonMessages[$reason] ?? "Response incomplete due to: $reason";
+				return "Incomplete Response: $message";
+			}
+
+			$outputText = '';
 			$outputs = $content['output'] ?? [];
-			$lastOutput = end($outputs);
-			return $lastOutput['content'][0]['text'] ?? null;
+
+			foreach ($outputs as $message) {
+				$contentItems = $message['content'] ?? [];
+				foreach ($contentItems as $item) {
+					if (($item['type'] ?? '') === 'output_text') {
+						$outputText .= $item['text'] ?? '';
+					}
+				}
+			}
+
+			return $outputText;
 		} catch (GuzzleException $e) {
 			Craft::error(
 				'Failed to generate content with GPT: ' . $e->getMessage(),

@@ -56,9 +56,9 @@
 		type: 'number',
 		min: 10,
 		label: 'Max Tokens',
-		instructions: 'The maximum amount of tokens to returns (default: 256)',
+		instructions: 'The maximum amount of tokens to returns (default: 1024)',
 		name: 'maxTokens',
-		value: settings.maxTokens
+		value: settings.maxTokens ? settings.maxTokens : ''
 	}) }}
 
 {% endblock %}
