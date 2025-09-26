@@ -157,7 +157,7 @@
 
 <div class="gpt-popover-cont" bind:this={contEl}>
 	<div class="gpt-popover">
-		{#if generatedText}
+		{#if generatedText !== null}
 			<GeneratedText
 				text={generatedText}
 				on:accept={onAccept}

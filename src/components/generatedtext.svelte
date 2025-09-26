@@ -24,5 +24,6 @@
 	.generated-text-content {
 		max-height: 40vh;
 		overflow-y: auto;
+		margin-block-end: 1em;
 	}
 </style>

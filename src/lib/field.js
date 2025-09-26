@@ -143,7 +143,7 @@ export class CkEditor extends Input {
 
 		this.el = cont.querySelector('textarea');
 		this.instance = this.cont.querySelector(
-			'.ck-editor__editable'
+			'.ck-editor__editable',
 		).ckeditorInstance;
 	}
 
