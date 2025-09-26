@@ -1,5 +1,14 @@
 # Release Notes for GPT Content Generator
 
+## 2.4.0 - 2025-09-26
+
+### Features
+- add support for gpt-5 and gpt-5-mini (default stays gpt-4o)
+- improved system prompt
+
+### Fixes
+- limit response height to allow for long responses (#9, thanks @eirabben)
+
 ## 2.3.0 - 2025-05-13
 
 ### Features
