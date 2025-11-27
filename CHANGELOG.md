@@ -1,5 +1,13 @@
 # Release Notes for GPT Content Generator
 
+## 2.5.0 - 2025-11-27
+
+### Features
+- add Vizy support (#13, please open a new issue if you find any bugs)
+
+### Fixes
+- setting `CRAFT_CP` results in an unexpected redirect (#14)
+
 ## 2.4.0 - 2025-09-26
 
 ### Features
