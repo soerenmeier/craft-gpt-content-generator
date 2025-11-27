@@ -50,7 +50,7 @@ class GptContentGenerator extends Plugin
 			View::EVENT_BEFORE_RENDER_TEMPLATE,
 			function () {
 				// Make sure we're in the CP
-				if (Craft::$app->request->isCpRequest) {
+				if (Craft::$app->request->isCpRequest && !Craft::$app->user->isGuest) {
 					Craft::$app->getView()->registerAssetBundle(Assets::class);
 					$this->vite->register('src/main.js');
 				}
