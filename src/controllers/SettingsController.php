@@ -117,6 +117,7 @@ function filterField($field, $nesting = false): ?array
 		case 'craft\ckeditor\Field':
 		case 'craft\redactor\Field':
 		case 'spicyweb\tinymce\fields\TinyMCE':
+		case 'verbb\vizy\fields\VizyField':
 			return [
 				'id' => (string) $field->id,
 				'type' => $type,

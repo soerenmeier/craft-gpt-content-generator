@@ -27,6 +27,10 @@ export class Field {
 				this.input = new TinyMCE(fieldGen.parentNode);
 				break;
 
+			case 'verbb\\vizy\\fields\\VizyField':
+				this.input = new Vizy(fieldGen.parentNode);
+				break;
+
 			default:
 				console.log('unknown type: ' + fieldGen.dataset.type);
 		}
@@ -182,5 +186,60 @@ export class TinyMCE extends Input {
 		}
 
 		window.tinymce.get(this.el.id).setContent(v);
+	}
+}
+
+const vizyEditorMap = new WeakMap();
+
+document.addEventListener('onVizyConfigReady', () => {
+	Craft.Vizy.Config.registerExtensions((extensions, vizyInput) => {
+		const inputEl = vizyInput.$el?.querySelector('input');
+		if (!inputEl) return;
+		vizyEditorMap.set(inputEl, vizyInput);
+	});
+});
+
+const VIZY_BLOCK_REGEX = /<vizy-block>.*?<\/vizy-block>/gm;
+const VIZY_BLOCK_SHORT_REGEX = /<vizy-block\s*\/>/gm;
+
+export class Vizy extends Input {
+	constructor(cont) {
+		super('vizy', cont);
+
+		this.el = cont.querySelector('input');
+	}
+
+	name() {
+		return this.el.name;
+	}
+
+	editor() {
+		const ed = vizyEditorMap.get(this.el)?.editor;
+		if (!ed)
+			alert('could not find vizy editor instance for ' + this.name());
+		return ed;
+	}
+
+	value() {
+		let html = this.editor().getHTML();
+		html = html.replace(VIZY_BLOCK_REGEX, '<vizy-block/>');
+
+		return html;
+	}
+
+	setValue(v) {
+		const html = this.editor().getHTML();
+
+		const blocks = html.match(VIZY_BLOCK_REGEX) ?? [];
+
+		let idx = 0;
+
+		v = v.replace(VIZY_BLOCK_SHORT_REGEX, () => {
+			const block = blocks[idx++];
+			if (!block) console.error('could not find vizy block', idx - 1);
+			return block ?? '';
+		});
+
+		this.editor().chain().focus().setContent(v, true).run();
 	}
 }
