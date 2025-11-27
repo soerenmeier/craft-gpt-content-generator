@@ -1,5 +1,11 @@
 # Release Notes for GPT Content Generator
 
+## 1.2.1 - 2025-11-27
+
+### Fixes
+
+-   setting `CRAFT_CP` results in an unexpected redirect (#14)
+
 ## 1.2.0 - 2024-06-13
 
 ### Features
