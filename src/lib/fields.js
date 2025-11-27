@@ -8,7 +8,12 @@ export default class Fields {
 
 	static async load() {
 		const resp = await fetch(
-			'/actions/gpt-content-generator/settings/get-fields'
+			'/actions/gpt-content-generator/settings/get-fields',
+			{
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest',
+				},
+			},
 		);
 		return new Fields(await resp.json());
 	}
@@ -38,8 +43,9 @@ export default class Fields {
 				body: data,
 				headers: {
 					Accept: 'application/json',
+					'X-Requested-With': 'XMLHttpRequest',
 				},
-			}
+			},
 		);
 		if (!resp.ok) throw new Error('not ok');
 

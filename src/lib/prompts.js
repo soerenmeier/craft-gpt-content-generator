@@ -23,7 +23,11 @@ export default class Prompts {
 	}
 
 	static async load() {
-		const resp = await fetch('/actions/gpt-content-generator/prompts/get');
+		const resp = await fetch('/actions/gpt-content-generator/prompts/get', {
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest',
+			},
+		});
 		return new Prompts(await resp.json());
 	}
 
@@ -71,8 +75,9 @@ export default class Prompts {
 				body: data,
 				headers: {
 					Accept: 'application/json',
+					'X-Requested-With': 'XMLHttpRequest',
 				},
-			}
+			},
 		);
 		if (!resp.ok) throw new Error('not ok');
 		prompt = await resp.json();
@@ -103,8 +108,9 @@ export default class Prompts {
 				body: data,
 				headers: {
 					Accept: 'application/json',
+					'X-Requested-With': 'XMLHttpRequest',
 				},
-			}
+			},
 		);
 		if (!resp.ok) throw new Error('not ok');
 
@@ -126,8 +132,9 @@ export default class Prompts {
 				body: data,
 				headers: {
 					Accept: 'application/json',
+					'X-Requested-With': 'XMLHttpRequest',
 				},
-			}
+			},
 		);
 		if (!resp.ok) throw new Error('not ok');
 
